@@ -1,6 +1,8 @@
 import pathlib
 import unittest
 
+import numpy as np
+
 from src import main
 
 
@@ -28,3 +30,18 @@ class TestStringColumnAnalyzer(unittest.TestCase):
         column = self.df[column_name]
         analisis = main.StringColumnAnalyzer(column)
         self.assertFalse(analisis.has_null_values())
+
+    def test_integer_column_if_no_null_values(self):
+        column_name = "Column integer"
+        column = self.df[column_name]
+        analisis = main.IntegerColumnAnalyzer(column)
+        self.assertTrue(analisis.has_null_values())
+        self.assertEqual(1111, analisis.max_value())
+        self.assertEqual(np.int64, type(analisis.max_value()))
+        self.assertEqual(1, analisis.min_value())
+        self.assertEqual(np.int64, type(analisis.min_value()))
+        self.assertEqual(4, analisis.max_length())
+        self.assertEqual(np.int64, type(analisis.max_length()))
+        self.assertEqual(1, analisis.min_length())
+        self.assertEqual(np.int64, type(analisis.min_length()))
+

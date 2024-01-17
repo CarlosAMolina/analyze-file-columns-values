@@ -56,3 +56,44 @@ class StringColumnAnalyzer:
     @property
     def _column_name(self) -> str:
         return self._column.name
+
+
+class IntegerColumnAnalyzer:
+    def __init__(self, column: Series):
+        self._column = column
+        self._df_to_analyze = None  # Never call this, work with `self._df`
+
+    def has_null_values(self) -> bool:
+        return self._column.isnull().values.any()
+
+    def max_value(self) -> int:
+        return self._df[f"{self._column_name}_int"].max()
+
+    def min_value(self) -> int:
+        return self._df[f"{self._column_name}_int"].min()
+
+    def max_length(self) -> int:
+        return self._df[f"{self._column_name}_length"].max()
+
+    def min_length(self) -> int:
+        return self._df[f"{self._column_name}_length"].min()
+
+    @property
+    def _df(self) -> Df:
+        if self._df_to_analyze is None:
+            self._df_to_analyze = self._get_df_add_analysis_columns()
+        return self._df_to_analyze
+
+    def _get_df_add_analysis_columns(self) -> Df:
+        result = Df(self._column)
+        result[f"{self._column_name}_int"] = result[self._column.name].astype('Int64')
+        result[f"{self._column_name}_length"] = result[f"{self._column_name}_int"].astype(str).str.len()
+        result.loc[
+                result[self._column.name].isnull(),
+                f"{self._column_name}_length"] = None
+        result[f"{self._column_name}_length"] = result[f"{self._column_name}_length"].astype('Int64')
+        return result
+
+    @property
+    def _column_name(self) -> str:
+        return self._column.name
