@@ -6,7 +6,8 @@ import pandas as pd
 
 
 def get_df_from_csv(path_name: str):
-    return pd.read_csv(path_name)
+    # Read all columns as str to not modify the values
+    return pd.read_csv(path_name, dtype=str)
 
 
 class StringColumnAnalyzer:
@@ -109,8 +110,9 @@ class IntegerColumnAnalyzer:
     def _get_df_add_analysis_columns(self) -> Df:
         result = Df(self._column)
         result[f"{self._column_name}_int"] = result[self._column.name].astype("Int64")
-        result[f"{self._column_name}_length"] = result[f"{self._column_name}_int"].astype(str).str.len()
-        result.loc[result[self._column.name].isnull(), f"{self._column_name}_length"] = None
+        result.loc[~result[self._column.name].isnull(), f"{self._column_name}_length"] = (
+            result[f"{self._column_name}_int"].astype(str).str.len()
+        )
         result[f"{self._column_name}_length"] = result[f"{self._column_name}_length"].astype("Int64")
         return result
 
@@ -127,11 +129,17 @@ class DecimalColumnAnalyzer:
     def has_null_values(self) -> bool:
         return self._column.isnull().values.any()
 
-    def max_value(self) -> int:
-        return self._df[self._column_name].max()
+    def max_value(self) -> str:
+        return self._df.loc[
+            self._df[f"{self._column_name}_numeric"] == self._df[f"{self._column_name}_numeric"].max(),
+            self._column_name,
+        ].iloc[0]
 
-    def min_value(self) -> int:
-        return self._df[self._column_name].min()
+    def min_value(self) -> str:
+        return self._df.loc[
+            self._df[f"{self._column_name}_numeric"] == self._df[f"{self._column_name}_numeric"].min(),
+            self._column_name,
+        ].iloc[0]
 
     # def max_length(self) -> int:
     #    return self._df[f"{self._column_name}_length"].max()
@@ -149,10 +157,12 @@ class DecimalColumnAnalyzer:
         # TODO manage if string column with different millar and decimal sepparator signs
         # TODO when working with decimal part, workt with it as string to not remove trailing 0
         result = Df(self._column)
-        # result[f"{self._column_name}_int"] = result[self._column.name].astype("Int64")
-        # result[f"{self._column_name}_length"] = result[f"{self._column_name}_int"].astype(str).str.len()
-        # result.loc[result[self._column.name].isnull(), f"{self._column_name}_length"] = None
-        # result[f"{self._column_name}_length"] = result[f"{self._column_name}_length"].astype("Int64")
+        result[f"{self._column_name}_numeric"] = result[self._column.name].astype(float)
+        condition_is_null = result[self._column_name].isnull()
+        result[f"{self._column_name}_int"] = result.loc[~condition_is_null, self._column_name].str.split(".").str[0]
+        result[f"{self._column_name}_decimal"] = result.loc[~condition_is_null, self._column_name].str.split(".").str[1]
+        result[f"{self._column_name}_int_length"] = result[f"{self._column_name}_int"].str.len().astype("Int64")
+        result[f"{self._column_name}_decimal_length"] = result[f"{self._column_name}_decimal"].str.len().astype("Int64")
         return result
 
     @property
