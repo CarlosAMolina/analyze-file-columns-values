@@ -24,6 +24,11 @@ class TestStringColumnAnalyzer(unittest.TestCase):
         self.assertEqual(9, analisis.max_length_if_no_stripped())
         self.assertEqual(0, analisis.min_length_if_stripped())
         self.assertEqual(1, analisis.min_length_if_no_stripped())
+        self.assertEqual(1, analisis.min_length_if_no_stripped())
+        self.assertEqual(["Foo Bar", "Bar Foo"], analisis.max_values_if_stripped())
+        self.assertEqual([" Foo Bar "], analisis.max_values_if_no_stripped())
+        self.assertEqual([""], analisis.min_values_if_stripped())
+        self.assertEqual([" "], analisis.min_values_if_no_stripped())
 
     def test_string_column_if_no_null_values(self):
         column_name = "Column string all lines with value"
@@ -44,4 +49,3 @@ class TestStringColumnAnalyzer(unittest.TestCase):
         self.assertEqual(np.int64, type(analisis.max_length()))
         self.assertEqual(1, analisis.min_length())
         self.assertEqual(np.int64, type(analisis.min_length()))
-

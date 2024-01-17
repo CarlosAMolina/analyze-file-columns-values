@@ -1,3 +1,5 @@
+import typing as tp
+
 from pandas import DataFrame as Df
 from pandas import Series
 import pandas as pd
@@ -35,6 +37,26 @@ class StringColumnAnalyzer:
 
     def min_length_if_no_stripped(self) -> int:
         return self._df[f"{self._column_name}_length"].min()
+
+    def max_values_if_stripped(self) -> tp.List[str]:
+        return self._df.loc[self._df[f"{self._column_name_stripped}_length"] == self.max_length_if_stripped()][
+            self._column_name_stripped
+        ].to_list()
+
+    def max_values_if_no_stripped(self) -> tp.List[str]:
+        return self._df.loc[self._df[f"{self._column_name}_length"] == self.max_length_if_no_stripped()][
+            self._column_name
+        ].to_list()
+
+    def min_values_if_stripped(self) -> tp.List[str]:
+        return self._df.loc[self._df[f"{self._column_name_stripped}_length"] == self.min_length_if_stripped()][
+            self._column_name_stripped
+        ].to_list()
+
+    def min_values_if_no_stripped(self) -> tp.List[str]:
+        return self._df.loc[self._df[f"{self._column_name}_length"] == self.min_length_if_no_stripped()][
+            self._column_name
+        ].to_list()
 
     @property
     def _df(self) -> Df:
@@ -86,12 +108,10 @@ class IntegerColumnAnalyzer:
 
     def _get_df_add_analysis_columns(self) -> Df:
         result = Df(self._column)
-        result[f"{self._column_name}_int"] = result[self._column.name].astype('Int64')
+        result[f"{self._column_name}_int"] = result[self._column.name].astype("Int64")
         result[f"{self._column_name}_length"] = result[f"{self._column_name}_int"].astype(str).str.len()
-        result.loc[
-                result[self._column.name].isnull(),
-                f"{self._column_name}_length"] = None
-        result[f"{self._column_name}_length"] = result[f"{self._column_name}_length"].astype('Int64')
+        result.loc[result[self._column.name].isnull(), f"{self._column_name}_length"] = None
+        result[f"{self._column_name}_length"] = result[f"{self._column_name}_length"].astype("Int64")
         return result
 
     @property

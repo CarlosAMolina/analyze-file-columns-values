@@ -2,4 +2,5 @@ Column string,Column string all lines with value,Column integer
 Foo, Foo,1
 ,Foo, 1111
  Foo Bar ,Foo,
+Bar Foo,Foo,
  ,Foo,11
