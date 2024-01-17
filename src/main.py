@@ -6,7 +6,7 @@ import pandas as pd
 
 
 def get_df_from_csv(path_name: str):
-    # Read all columns as str to not modify the values
+    # Read all columns as str to not modify numeric values
     return pd.read_csv(path_name, dtype=str)
 
 
@@ -147,6 +147,8 @@ class DecimalColumnAnalyzer:
     # def min_length(self) -> int:
     #    return self._df[f"{self._column_name}_length"].min()
 
+    # TODO get values with max/min int/decimal len
+
     @property
     def _df(self) -> Df:
         if self._df_to_analyze is None:
@@ -159,10 +161,25 @@ class DecimalColumnAnalyzer:
         result = Df(self._column)
         result[f"{self._column_name}_numeric"] = result[self._column.name].astype(float)
         condition_is_null = result[self._column_name].isnull()
-        result[f"{self._column_name}_int"] = result.loc[~condition_is_null, self._column_name].str.split(".").str[0]
-        result[f"{self._column_name}_decimal"] = result.loc[~condition_is_null, self._column_name].str.split(".").str[1]
-        result[f"{self._column_name}_int_length"] = result[f"{self._column_name}_int"].str.len().astype("Int64")
-        result[f"{self._column_name}_decimal_length"] = result[f"{self._column_name}_decimal"].str.len().astype("Int64")
+        result[f"{self._column_name}_int"] = (
+            result.loc[~condition_is_null, self._column_name].str.split(".").str[0].astype("Int64")
+        )
+        result[f"{self._column_name}_decimal"] = (
+            result.loc[~condition_is_null, self._column_name].str.split(".").str[1].astype("Int64")
+        )
+        result[f"{self._column_name}_int_length"] = (
+            result.loc[~result[f"{self._column_name}_int"].isnull(), f"{self._column_name}_int"]
+            .astype(str)
+            .str.len()
+            .astype("Int64")
+        )
+        result[f"{self._column_name}_decimal_length"] = (
+            result.loc[~result[f"{self._column_name}_decimal"].isnull(), f"{self._column_name}_decimal"]
+            .astype(str)
+            .str.len()
+            .astype("Int64")
+        )
+        print(result)
         return result
 
     @property
