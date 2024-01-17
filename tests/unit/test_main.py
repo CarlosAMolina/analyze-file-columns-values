@@ -36,7 +36,7 @@ class TestStringColumnAnalyzer(unittest.TestCase):
         analisis = main.StringColumnAnalyzer(column)
         self.assertFalse(analisis.has_null_values())
 
-    def test_integer_column_if_no_null_values(self):
+    def test_integer_column(self):
         column_name = "Column integer"
         column = self.df[column_name]
         analisis = main.IntegerColumnAnalyzer(column)
@@ -49,3 +49,15 @@ class TestStringColumnAnalyzer(unittest.TestCase):
         self.assertEqual(np.int64, type(analisis.max_length()))
         self.assertEqual(1, analisis.min_length())
         self.assertEqual(np.int64, type(analisis.min_length()))
+
+    def test_decimal_column(self):
+        column_name = "Column decimal"
+        column = self.df[column_name]
+        analisis = main.DecimalColumnAnalyzer(column)
+        self.assertTrue(analisis.has_null_values())
+        # self.assertEqual(np.int64, type(analisis.max_length()))
+        # self.assertEqual(1, analisis.min_length())
+        # self.assertEqual(np.int64, type(analisis.min_length()))
+        self.assertEqual(12345.1234, analisis.max_value())
+        self.assertEqual(-12345.1, analisis.min_value())
+        # self.assertEqual(4, analisis.max_length())
