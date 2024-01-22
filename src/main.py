@@ -162,9 +162,9 @@ class DecimalColumnAnalyzer:
         return get_df_values_of_column(column_name, condition, self._df)
 
     def values_with_max_length_of_decimal_part(self) -> int:
-        return self._df.loc[self._df[f"{self._column_name}_decimal_length"] == self.max_length_of_decimal_part()][
-            f"{self._column_name}_numeric"
-        ].to_list()
+        condition = self._df[f"{self._column_name}_decimal_length"] == self.max_length_of_decimal_part()
+        column_name = f"{self._column_name}_numeric"
+        return get_df_values_of_column(column_name, condition, self._df)
 
     @property
     def _df(self) -> Df:
