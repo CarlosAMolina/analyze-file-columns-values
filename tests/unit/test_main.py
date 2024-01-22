@@ -62,5 +62,9 @@ class TestStringColumnAnalyzer(unittest.TestCase):
         self.assertEqual(5, analisis.max_length_of_integer_part())
         self.assertEqual([12345.1234, -12345.1], analisis.values_with_max_length_of_integer_part())
         self.assertEqual(np.int64, type(analisis.max_length_of_decimal_part()))
+        # Check trailing 0 is not deleted
         self.assertEqual(5, analisis.max_length_of_decimal_part())
         self.assertEqual([12345.1234], analisis.values_with_max_length_of_decimal_part())
+        # TODO check values with E (capital e)
+        # TODO check values with negative e
+        # TODO check with e which are the max and min integer and decimal parts

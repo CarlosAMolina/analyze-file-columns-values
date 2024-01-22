@@ -175,14 +175,16 @@ class DecimalColumnAnalyzer:
         # TODO manage if string column with different millar and decimal sepparator signs
         # TODO when working with decimal part, workt with it as string to not remove trailing 0
         result = Df(self._column)
-        result[f"{self._column_name}_numeric"] = result[self._column.name].astype(float)
+        result[f"{self._column_name}_without_e"] = result[self._column_name].str.split("e").str[0]
+        result[f"{self._column_name}_e_value"] = result[self._column_name].str.split("e").str[1].astype("Int64")
+        result[f"{self._column_name}_numeric"] = result[self._column_name].astype(float)
         condition_is_null = result[self._column_name].isnull()
         result[f"{self._column_name}_int"] = (
-            result.loc[~condition_is_null, self._column_name].str.split(".").str[0].astype("Int64")
+            result.loc[~condition_is_null, f"{self._column_name}_without_e"].str.split(".").str[0].astype("Int64")
         )
         result[f"{self._column_name}_int_absolute"] = result[f"{self._column_name}_int"].abs()
         result[f"{self._column_name}_decimal"] = (
-            result.loc[~condition_is_null, self._column_name].str.split(".").str[1].astype("Int64")
+            result.loc[~condition_is_null, f"{self._column_name}_without_e"].str.split(".").str[1].astype("Int64")
         )
         result[f"{self._column_name}_int_length"] = (
             result.loc[~result[f"{self._column_name}_int_absolute"].isnull(), f"{self._column_name}_int_absolute"]
@@ -195,6 +197,9 @@ class DecimalColumnAnalyzer:
             .astype(str)
             .str.len()
             .astype("Int64")
+        )
+        result.loc[~result[f"{self._column_name}_e_value"].isna(), f"{self._column_name}_decimal_length"] = (
+            result[f"{self._column_name}_decimal_length"] - result[f"{self._column_name}_e_value"]
         )
         pd.set_option("display.max_columns", None)
         print(result)
