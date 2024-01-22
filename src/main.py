@@ -145,8 +145,9 @@ class DecimalColumnAnalyzer:
         return self._df[f"{self._column_name}_int_length"].max()
 
     def values_with_max_length_of_integer_part(self) -> int:
-        # TODO test
-        raise NotImplementedError
+        return self._df.loc[self._df[f"{self._column_name}_int_length"] == self.max_length_of_integer_part()][
+            f"{self._column_name}_numeric"
+        ].to_list()
 
     # def max_length(self) -> int:
     #    return self._df[f"{self._column_name}_length"].max()
