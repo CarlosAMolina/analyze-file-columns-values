@@ -40,9 +40,8 @@ class StringColumnAnalyzer:
         return self._df[f"{self._column_name}_length"].min()
 
     def max_values_if_stripped(self) -> tp.List[str]:
-        return self._df.loc[self._df[f"{self._column_name_stripped}_length"] == self.max_length_if_stripped()][
-            self._column_name_stripped
-        ].to_list()
+        condition = self._df[f"{self._column_name_stripped}_length"] == self.max_length_if_stripped()
+        return get_df_values_of_column(self._column_name_stripped, condition, self._df)
 
     def max_values_if_no_stripped(self) -> tp.List[str]:
         condition = self._df[f"{self._column_name}_length"] == self.max_length_if_no_stripped()
