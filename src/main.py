@@ -141,6 +141,13 @@ class DecimalColumnAnalyzer:
             self._column_name,
         ].iloc[0]
 
+    def max_length_of_integer_part(self) -> int:
+        return self._df[f"{self._column_name}_int_length"].max()
+
+    def values_with_max_length_of_integer_part(self) -> int:
+        # TODO test
+        raise NotImplementedError
+
     # def max_length(self) -> int:
     #    return self._df[f"{self._column_name}_length"].max()
 
@@ -164,11 +171,12 @@ class DecimalColumnAnalyzer:
         result[f"{self._column_name}_int"] = (
             result.loc[~condition_is_null, self._column_name].str.split(".").str[0].astype("Int64")
         )
+        result[f"{self._column_name}_int_absolute"] = result[f"{self._column_name}_int"].abs()
         result[f"{self._column_name}_decimal"] = (
             result.loc[~condition_is_null, self._column_name].str.split(".").str[1].astype("Int64")
         )
         result[f"{self._column_name}_int_length"] = (
-            result.loc[~result[f"{self._column_name}_int"].isnull(), f"{self._column_name}_int"]
+            result.loc[~result[f"{self._column_name}_int_absolute"].isnull(), f"{self._column_name}_int_absolute"]
             .astype(str)
             .str.len()
             .astype("Int64")
@@ -179,6 +187,7 @@ class DecimalColumnAnalyzer:
             .str.len()
             .astype("Int64")
         )
+        pd.set_option("display.max_columns", None)
         print(result)
         return result
 

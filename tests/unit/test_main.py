@@ -61,4 +61,5 @@ class TestStringColumnAnalyzer(unittest.TestCase):
         # Check trailing 0 is not deleted
         self.assertEqual(" 12345.12340", analisis.max_value())
         self.assertEqual("-12345.1", analisis.min_value())
+        self.assertEqual(5, analisis.max_length_of_integer_part())
         # self.assertEqual(4, analisis.max_length())
