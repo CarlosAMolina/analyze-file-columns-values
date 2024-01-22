@@ -55,9 +55,9 @@ class StringColumnAnalyzer:
         return get_df_values_of_column(column_name, condition, self._df)
 
     def min_values_if_no_stripped(self) -> tp.List[str]:
-        return self._df.loc[self._df[f"{self._column_name}_length"] == self.min_length_if_no_stripped()][
-            self._column_name
-        ].to_list()
+        condition = self._df[f"{self._column_name}_length"] == self.min_length_if_no_stripped()
+        column_name = self._column_name
+        return get_df_values_of_column(column_name, condition, self._df)
 
     @property
     def _df(self) -> Df:
