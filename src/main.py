@@ -42,22 +42,22 @@ class StringColumnAnalyzer:
     def max_values_if_stripped(self) -> tp.List[str]:
         condition = self._df[f"{self._column_name_stripped}_length"] == self.max_length_if_stripped()
         column_name = self._column_name_stripped
-        return get_df_values_of_column(column_name, condition, self._df)
+        return get_unique_values_of_column(column_name, condition, self._df)
 
     def max_values_if_no_stripped(self) -> tp.List[str]:
         condition = self._df[f"{self._column_name}_length"] == self.max_length_if_no_stripped()
         column_name = self._column_name
-        return get_df_values_of_column(column_name, condition, self._df)
+        return get_unique_values_of_column(column_name, condition, self._df)
 
     def min_values_if_stripped(self) -> tp.List[str]:
         condition = self._df[f"{self._column_name_stripped}_length"] == self.min_length_if_stripped()
         column_name = self._column_name_stripped
-        return get_df_values_of_column(column_name, condition, self._df)
+        return get_unique_values_of_column(column_name, condition, self._df)
 
     def min_values_if_no_stripped(self) -> tp.List[str]:
         condition = self._df[f"{self._column_name}_length"] == self.min_length_if_no_stripped()
         column_name = self._column_name
-        return get_df_values_of_column(column_name, condition, self._df)
+        return get_unique_values_of_column(column_name, condition, self._df)
 
     @property
     def _df(self) -> Df:
@@ -81,7 +81,7 @@ class StringColumnAnalyzer:
         return self._column.name
 
 
-def get_df_values_of_column(
+def get_unique_values_of_column(
     column_name: str,
     condition: Series,
     df: Df,
@@ -158,12 +158,12 @@ class DecimalColumnAnalyzer:
     def values_with_max_length_of_integer_part(self) -> int:
         condition = self._df[f"{self._column_name}_int_length"] == self.max_length_of_integer_part()
         column_name = f"{self._column_name}_numeric"
-        return get_df_values_of_column(column_name, condition, self._df)
+        return get_unique_values_of_column(column_name, condition, self._df)
 
     def values_with_max_length_of_decimal_part(self) -> int:
         condition = self._df[f"{self._column_name}_decimal_length"] == self.max_length_of_decimal_part()
         column_name = f"{self._column_name}_numeric"
-        return get_df_values_of_column(column_name, condition, self._df)
+        return get_unique_values_of_column(column_name, condition, self._df)
 
     @property
     def _df(self) -> Df:
