@@ -81,13 +81,12 @@ class StringColumnAnalyzer:
         return self._column.name
 
 
-# TODO add unique
 def get_df_values_of_column(
     column_name: str,
     condition: Series,
     df: Df,
 ) -> tp.List[tp.Any]:
-    return df.loc[condition][column_name].to_list()
+    return df.loc[condition][column_name].drop_duplicates().to_list()
 
 
 class IntegerColumnAnalyzer:
