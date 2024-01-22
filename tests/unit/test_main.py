@@ -64,3 +64,4 @@ class TestStringColumnAnalyzer(unittest.TestCase):
         self.assertEqual(5, analisis.max_length_of_integer_part())
         self.assertEqual([12345.1234, -12345.1], analisis.values_with_max_length_of_integer_part())
         self.assertEqual(5, analisis.max_length_of_decimal_part())
+        self.assertEqual([12345.1234], analisis.values_with_max_length_of_decimal_part())

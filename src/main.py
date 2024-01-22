@@ -152,13 +152,10 @@ class DecimalColumnAnalyzer:
             f"{self._column_name}_numeric"
         ].to_list()
 
-    # def max_length(self) -> int:
-    #    return self._df[f"{self._column_name}_length"].max()
-
-    # def min_length(self) -> int:
-    #    return self._df[f"{self._column_name}_length"].min()
-
-    # TODO get values with max/min int/decimal len
+    def values_with_max_length_of_decimal_part(self) -> int:
+        return self._df.loc[self._df[f"{self._column_name}_decimal_length"] == self.max_length_of_decimal_part()][
+            f"{self._column_name}_numeric"
+        ].to_list()
 
     @property
     def _df(self) -> Df:
