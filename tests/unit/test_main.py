@@ -71,5 +71,5 @@ class TestStringColumnAnalyzer(unittest.TestCase):
 def get_df_from_csv_test_file(file_name: str) -> Df:
     script_dir = pathlib.Path(__file__).parent.absolute()
     tests_dir = script_dir.parent
-    csv_file_path_name = str(pathlib.PurePath(tests_dir, "files", "file.csv"))
+    csv_file_path_name = str(pathlib.PurePath(tests_dir, "files", file_name))
     return main.get_df_from_csv(csv_file_path_name)
