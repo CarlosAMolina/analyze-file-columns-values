@@ -13,7 +13,7 @@ class TestFileIsReadAsExpected(unittest.TestCase):
         self.assertEquals(["3.4", " 12345.12340", " 1.234512340e4", "3", np.nan, "-12345.1"], result)
 
 
-class TestStringColumnAnalyzer(unittest.TestCase):
+class TestAnalyzerClassesReadFromFile(unittest.TestCase):
     def setUp(self):
         self.df = get_df_from_csv_test_file("file.csv")
 
