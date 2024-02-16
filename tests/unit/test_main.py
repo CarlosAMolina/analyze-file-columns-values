@@ -91,15 +91,15 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(3, analisis.max_length_of_integer_part())
 
-    # def test_max_length_of_integer_part_is_not_afected_by_sign(self):
-    #     column = pd.Series(data=["-1234.123", "1234.123"], name="values")
-    #     analisis = main.DecimalColumnAnalyzer(column)
-    #     self.assertEqual(4, analisis.max_length_of_integer_part())
+    def test_values_with_max_length_of_integer_part_is_not_afected_by_sign(self):
+        column = pd.Series(data=["-1234.123", "1234.123", "11.1"], name="values")
+        analisis = main.DecimalColumnAnalyzer(column)
+        self.assertEqual([-1234.123, 1234.123], analisis.values_with_max_length_of_integer_part())
 
-    # def test_max_length_of_integer_part_is_not_afected_by_value(self):
-    #     column = pd.Series(data=["12.3", "33.123"], name="values")
-    #     analisis = main.DecimalColumnAnalyzer(column)
-    #     self.assertEqual(4, analisis.max_length_of_integer_part())
+    # def test_values_with_max_length_of_integer_part_is_not_afected_by_integer_or_decimal_values(self):
+    #    column = pd.Series(data=["12.3", "33.123"], name="values")
+    #    analisis = main.DecimalColumnAnalyzer(column)
+    #    self.assertEqual([12.3, 33.123], analisis.max_length_of_integer_part())
 
 
 class TestAnalyzerClassesReadFromFile(unittest.TestCase):
