@@ -2,6 +2,7 @@ import pathlib
 import unittest
 
 from pandas import DataFrame as Df
+import pandas as pd
 import numpy as np
 
 from src import main
@@ -9,8 +10,17 @@ from src import main
 
 class TestFileIsReadAsExpected(unittest.TestCase):
     def test_decimal_column(self):
-        result = get_df_from_csv_test_file("all_possible_decimal_values.csv")["value"].to_list()
-        self.assertEqual(["3.4", " 12345.12340", " 1.234512340e4", "3", np.nan, "-12345.1"], result)
+        column_name = "value"
+        result = get_df_from_csv_test_file("all_possible_decimal_values.csv")[column_name]
+        expected_result = pd.Series(
+            data=["3.4", " 12345.12340", " 1.234512340e4", "3", np.nan, "-12345.1"], name=column_name
+        )
+        pd.testing.assert_series_equal(expected_result, result)
+
+
+class TestDecimalColumnAnalyzer(unittest.TestCase):
+    def test_has_null_values_is_false_if_no_null_values(self):
+        pass  # TODO
 
 
 class TestAnalyzerClassesReadFromFile(unittest.TestCase):
