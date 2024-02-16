@@ -20,7 +20,10 @@ class TestFileIsReadAsExpected(unittest.TestCase):
 
 class TestDecimalColumnAnalyzer(unittest.TestCase):
     def test_has_null_values_is_false_if_no_null_values(self):
-        pass  # TODO
+        column = pd.Series(["1.1"])
+        analyzer = main.DecimalColumnAnalyzer(column)
+        result = analyzer.has_null_values()
+        self.assertFalse(result)
 
 
 class TestAnalyzerClassesReadFromFile(unittest.TestCase):
