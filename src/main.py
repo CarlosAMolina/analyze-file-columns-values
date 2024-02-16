@@ -202,7 +202,7 @@ class DecimalColumnAnalyzer:
             result[f"{self._column_name}_decimal_length"] - result[f"{self._column_name}_e_value"]
         )
         pd.set_option("display.max_columns", None)
-        print(result)
+        # print(result) # TODO rm
         return result
 
     @property
