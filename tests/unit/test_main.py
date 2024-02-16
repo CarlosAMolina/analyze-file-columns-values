@@ -81,6 +81,26 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(np.int64, type(analisis.max_length_of_integer_part()))
 
+    def test_max_length_of_integer_part_if_is_the_negative_value(self):
+        column = pd.Series(data=["-1234.1", "123.1"], name="values")
+        analisis = main.DecimalColumnAnalyzer(column)
+        self.assertEqual(4, analisis.max_length_of_integer_part())
+
+    def test_max_length_of_integer_part_if_is_the_positive_value(self):
+        column = pd.Series(data=["123.1", "-12.1"], name="values")
+        analisis = main.DecimalColumnAnalyzer(column)
+        self.assertEqual(3, analisis.max_length_of_integer_part())
+
+    # def test_max_length_of_integer_part_is_not_afected_by_sign(self):
+    #     column = pd.Series(data=["-1234.123", "1234.123"], name="values")
+    #     analisis = main.DecimalColumnAnalyzer(column)
+    #     self.assertEqual(4, analisis.max_length_of_integer_part())
+
+    # def test_max_length_of_integer_part_is_not_afected_by_value(self):
+    #     column = pd.Series(data=["12.3", "33.123"], name="values")
+    #     analisis = main.DecimalColumnAnalyzer(column)
+    #     self.assertEqual(4, analisis.max_length_of_integer_part())
+
 
 class TestAnalyzerClassesReadFromFile(unittest.TestCase):
     def setUp(self):
