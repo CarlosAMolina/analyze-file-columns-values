@@ -76,6 +76,11 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual("-13.1", analisis.min_value())
 
+    def test_max_length_of_integer_part_has_expected_type(self):
+        column = pd.Series(data=["-1.2e1", "-13.1"], name="values")
+        analisis = main.DecimalColumnAnalyzer(column)
+        self.assertEqual(np.int64, type(analisis.max_length_of_integer_part()))
+
 
 class TestAnalyzerClassesReadFromFile(unittest.TestCase):
     def setUp(self):
