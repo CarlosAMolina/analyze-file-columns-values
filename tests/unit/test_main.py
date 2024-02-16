@@ -1,6 +1,7 @@
 import pathlib
 import unittest
 
+from pandas import DataFrame as Df
 import numpy as np
 
 from src import main
@@ -8,10 +9,7 @@ from src import main
 
 class TestStringColumnAnalyzer(unittest.TestCase):
     def setUp(self):
-        script_dir = pathlib.Path(__file__).parent.absolute()
-        tests_dir = script_dir.parent
-        csv_file_path_name = str(pathlib.PurePath(tests_dir, "files", "file.csv"))
-        self.df = main.get_df_from_csv(csv_file_path_name)
+        self.df = get_df_from_csv_test_file("file.csv")
 
     def test_string_column_if_null_values(self):
         column_name = "Column string"
@@ -68,3 +66,10 @@ class TestStringColumnAnalyzer(unittest.TestCase):
         # TODO check values with E (capital e)
         # TODO check values with negative e
         # TODO check with e which are the max and min integer and decimal parts
+
+
+def get_df_from_csv_test_file(file_name: str) -> Df:
+    script_dir = pathlib.Path(__file__).parent.absolute()
+    tests_dir = script_dir.parent
+    csv_file_path_name = str(pathlib.PurePath(tests_dir, "files", "file.csv"))
+    return main.get_df_from_csv(csv_file_path_name)
