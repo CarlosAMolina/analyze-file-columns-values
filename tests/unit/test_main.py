@@ -36,6 +36,11 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(" 12345.12340", analisis.max_value())
 
+    def test_max_value_if_null_values(self):
+        column = pd.Series(data=["1.1", "2.2", np.nan], name="values")
+        analisis = main.DecimalColumnAnalyzer(column)
+        self.assertEqual("2.2", analisis.max_value())
+
     def test_max_value_if_e_number_is_max_value(self):
         column = pd.Series(data=["1.2e3", "3.3"], name="values")
         analisis = main.DecimalColumnAnalyzer(column)
@@ -55,6 +60,11 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         column = pd.Series(data=["-1.2e3", "-1.1"], name="values")
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual("-1.2e3", analisis.min_value())
+
+    def test_min_value_if_null_values(self):
+        column = pd.Series(data=["1.1", "2.2", np.nan], name="values")
+        analisis = main.DecimalColumnAnalyzer(column)
+        self.assertEqual("1.1", analisis.min_value())
 
     def test_min_value_if_e_number_is_min_value_and_negative(self):
         column = pd.Series(data=["1.2e-1", "0.13"], name="values")
