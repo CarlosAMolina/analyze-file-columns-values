@@ -25,6 +25,12 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         result = analyzer.has_null_values()
         self.assertFalse(result)
 
+    def test_has_null_values_is_false_if_null_values(self):
+        column = pd.Series(["1.1", np.nan])
+        analyzer = main.DecimalColumnAnalyzer(column)
+        result = analyzer.has_null_values()
+        self.assertTrue(result)
+
 
 class TestAnalyzerClassesReadFromFile(unittest.TestCase):
     def setUp(self):
