@@ -36,6 +36,11 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(" 12345.12340", analisis.max_value())
 
+    def test_max_value_if_e_number_is_max_value(self):
+        column = pd.Series(data=["1.2e3", "3.3"], name="values")
+        analisis = main.DecimalColumnAnalyzer(column)
+        self.assertEqual("1.2e3", analisis.max_value())
+
 
 class TestAnalyzerClassesReadFromFile(unittest.TestCase):
     def setUp(self):
