@@ -31,6 +31,11 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         result = analyzer.has_null_values()
         self.assertTrue(result)
 
+    def test_max_value_does_not_remove_trailing_0(self):
+        column = pd.Series(data=[" 12345.12340", "3.3"], name="values")
+        analisis = main.DecimalColumnAnalyzer(column)
+        self.assertEqual(" 12345.12340", analisis.max_value())
+
 
 class TestAnalyzerClassesReadFromFile(unittest.TestCase):
     def setUp(self):
