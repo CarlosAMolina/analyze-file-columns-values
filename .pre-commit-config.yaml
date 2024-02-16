@@ -1,14 +1,21 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
+# Tests:
+# - https://stackoverflow.com/questions/59358182/python-pre-commit-unittest-faild
+# - https://pre-commit.com/#creating-new-hooks
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.4.0
+    rev: v4.5.0
     hooks:
     -   id: trailing-whitespace
 -   repo: https://github.com/psf/black
-    rev: 22.3.0
+    rev: 24.1.1
     hooks:
     -   id: black
+-   repo: https://github.com/pycqa/flake8
+    rev: 7.0.0
+    hooks:
+    -   id: flake8
 -   repo: local
     hooks:
     -   id: unittests
@@ -18,3 +25,4 @@ repos:
         pass_filenames: false
         verbose: true
         args: ["discover", "-s", "tests"]
+
