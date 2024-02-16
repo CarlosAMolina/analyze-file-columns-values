@@ -7,6 +7,12 @@ import numpy as np
 from src import main
 
 
+class TestFileIsReadAsExpected(unittest.TestCase):
+    def test_decimal_column(self):
+        result = get_df_from_csv_test_file("all_possible_decimal_values.csv")["value"].to_list()
+        self.assertEquals(["3.4", " 12345.12340", " 1.234512340e4", "3", np.nan, "-12345.1"], result)
+
+
 class TestStringColumnAnalyzer(unittest.TestCase):
     def setUp(self):
         self.df = get_df_from_csv_test_file("file.csv")
