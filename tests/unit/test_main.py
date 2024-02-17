@@ -96,6 +96,11 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(4, analisis.max_length_of_integer_part())
 
+    def test_max_length_of_integer_part_if_is_e_number_negative(self):
+        column = pd.Series(data=["1234.1e-1", "12.1"], name="values")
+        analisis = main.DecimalColumnAnalyzer(column)
+        self.assertEqual(3, analisis.max_length_of_integer_part())
+
     def test_values_with_max_length_of_integer_part_is_not_afected_by_sign(self):
         column = pd.Series(data=["-1234.123", "1234.123", "11.1"], name="values")
         analisis = main.DecimalColumnAnalyzer(column)
