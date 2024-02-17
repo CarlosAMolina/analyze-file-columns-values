@@ -99,12 +99,12 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
     def test_values_with_max_length_of_integer_part_is_not_afected_by_sign(self):
         column = pd.Series(data=["-1234.123", "1234.123", "11.1"], name="values")
         analisis = main.DecimalColumnAnalyzer(column)
-        self.assertEqual([-1234.123, 1234.123], analisis.values_with_max_length_of_integer_part())
+        self.assertEqual(["-1234.123", "1234.123"], analisis.values_with_max_length_of_integer_part())
 
     def test_values_with_max_length_of_integer_part_is_not_afected_by_integer_or_decimal_values(self):
         column = pd.Series(data=["12.3", "33.123"], name="values")
         analisis = main.DecimalColumnAnalyzer(column)
-        self.assertEqual([12.3, 33.123], analisis.values_with_max_length_of_integer_part())
+        self.assertEqual(["12.3", "33.123"], analisis.values_with_max_length_of_integer_part())
 
     # TODO def test_values_with_max_length_of_integer_part_if_is_e_number(self):
     # TODO     column = pd.Series(data=["12.3e2", "33.1"], name="values")
@@ -163,11 +163,13 @@ class TestAnalyzerClassesReadFromFile(unittest.TestCase):
         self.assertEqual("-12345.1", analisis.min_value())
         self.assertEqual(np.int64, type(analisis.max_length_of_integer_part()))
         self.assertEqual(5, analisis.max_length_of_integer_part())
-        self.assertEqual([12345.1234, -12345.1], analisis.values_with_max_length_of_integer_part())
+        self.assertEqual(
+            [" 12345.12340", " 1.234512340e4", "-12345.1"], analisis.values_with_max_length_of_integer_part()
+        )
         self.assertEqual(np.int64, type(analisis.max_length_of_decimal_part()))
         # Check trailing 0 is not deleted
         self.assertEqual(5, analisis.max_length_of_decimal_part())
-        self.assertEqual([12345.1234], analisis.values_with_max_length_of_decimal_part())
+        self.assertEqual([" 12345.12340", " 1.234512340e4"], analisis.values_with_max_length_of_decimal_part())
         # TODO check values with E (capital e)
         # TODO check values with negative e
         # TODO check with e which are the max and min integer and decimal parts
