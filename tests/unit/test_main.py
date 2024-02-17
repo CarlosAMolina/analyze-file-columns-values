@@ -116,6 +116,13 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(["12.3e2"], analisis.values_with_max_length_of_integer_part())
 
+    def test_values_with_max_length_of_integer_part_if_is_e_number_matches_no_e_number(self):
+        column = pd.Series(data=["12.3e1", "111.1"], name="values")
+        analisis = main.DecimalColumnAnalyzer(column)
+        self.assertEqual(["12.3e1", "111.1"], analisis.values_with_max_length_of_integer_part())
+
+    # TODO check trailing 0 is not removed when working with decimal parts.
+
 
 class TestAnalyzerClassesReadFromFile(unittest.TestCase):
     def setUp(self):
