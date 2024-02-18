@@ -182,6 +182,8 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(["12.123e1", "1.11", "12.1e-1"], analisis.values_with_max_length_of_decimal_part())
 
+    # TODO test methos if there are null values, exmaple, length of columns with null values != 0, must be None
+
 
 class TestAnalyzerClassesReadFromFile(unittest.TestCase):
     def setUp(self):
