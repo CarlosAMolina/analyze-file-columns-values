@@ -11,6 +11,24 @@ def get_df_from_csv(path_name: str):
     return pd.read_csv(path_name, dtype=str)
 
 
+def show_integer_column_analysis(column: Series):
+    print(f"Analyzed integer column: {column.name}")
+    analysis = IntegerColumnAnalyzer(column)
+    print("Are there null values?", analysis.has_null_values())
+    print(
+        "Max value. Number of digits: {}. Value: {}".format(
+            analysis.max_length(),
+            analysis.max_value(),
+        )
+    )
+    print(
+        "Min value. Number of digits: {}. Value: {}".format(
+            analysis.min_length(),
+            analysis.min_value(),
+        )
+    )
+
+
 def show_string_column_analysis(column: Series):
     print(f"Analyzed string column: {column.name}")
     analysis = StringColumnAnalyzer(column)
@@ -42,24 +60,6 @@ def show_string_column_analysis(column: Series):
         "  If values are not stripped. Number of characters: {}. Values: {}".format(
             analysis.min_length_if_no_stripped(),
             analysis.min_values_if_no_stripped(),
-        )
-    )
-
-
-def show_integer_column_analysis(column: Series):
-    print(f"Analyzed integer column: {column.name}")
-    analysis = IntegerColumnAnalyzer(column)
-    print("Are there null values?", analysis.has_null_values())
-    print(
-        "Max value. Number of digits: {}. Value: {}".format(
-            analysis.max_length(),
-            analysis.max_value(),
-        )
-    )
-    print(
-        "Min value. Number of digits: {}. Value: {}".format(
-            analysis.min_length(),
-            analysis.min_value(),
         )
     )
 
