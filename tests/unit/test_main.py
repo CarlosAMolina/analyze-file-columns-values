@@ -37,6 +37,24 @@ class TestIntegerColumnAnalyzer(unittest.TestCase):
         result = analyzer.has_null_values()
         self.assertTrue(result)
 
+    def test_max_value(self):
+        column = pd.Series(data=["-1", "2", np.nan], name="values")
+        analyzer = main.IntegerColumnAnalyzer(column)
+        result = analyzer.max_value()
+        self.assertEqual(2, result)
+
+    def test_min_value(self):
+        column = pd.Series(data=["-1", "2", np.nan], name="values")
+        analyzer = main.IntegerColumnAnalyzer(column)
+        result = analyzer.min_value()
+        self.assertEqual(-1, result)
+
+    def test_max_length_is_not_affected_by_negative_numbers(self):
+        column = pd.Series(data=["-123", "2", np.nan], name="values")
+        analyzer = main.IntegerColumnAnalyzer(column)
+        result = analyzer.max_length()
+        self.assertEqual(3, result)
+
 
 class TestDecimalColumnAnalyzer(unittest.TestCase):
     def test_has_null_values_is_false_if_no_null_values(self):

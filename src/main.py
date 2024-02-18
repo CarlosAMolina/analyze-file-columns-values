@@ -119,8 +119,9 @@ class IntegerColumnAnalyzer:
     def _get_df_add_analysis_columns(self) -> Df:
         result = Df(self._column)
         result[f"{self._column_name}_int"] = result[self._column.name].astype("Int64")
+        result[f"{self._column_name}_int_absolute"] = result[f"{self._column_name}_int"].abs()
         result.loc[~result[self._column.name].isnull(), f"{self._column_name}_length"] = (
-            result[f"{self._column_name}_int"].astype(str).str.len()
+            result[f"{self._column_name}_int_absolute"].astype(str).str.len()
         )
         result[f"{self._column_name}_length"] = result[f"{self._column_name}_length"].astype("Int64")
         return result
