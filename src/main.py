@@ -46,6 +46,24 @@ def show_string_column_analysis(column: Series):
     )
 
 
+def show_integer_column_analysis(column: Series):
+    print(f"Analyzed integer column: {column.name}")
+    analysis = IntegerColumnAnalyzer(column)
+    print("Are there null values?", analysis.has_null_values())
+    print(
+        "Max value. Number of digits: {}. Value: {}".format(
+            analysis.max_length(),
+            analysis.max_value(),
+        )
+    )
+    print(
+        "Min value. Number of digits: {}. Value: {}".format(
+            analysis.min_length(),
+            analysis.min_value(),
+        )
+    )
+
+
 class StringColumnAnalyzer:
     def __init__(self, column: Series):
         self._column = column

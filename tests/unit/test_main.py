@@ -9,6 +9,10 @@ from src import main
 
 
 class TestShowAnalysis(unittest.TestCase):
+    def test_show_integer_column_analysis(self):
+        column = pd.Series(data=["1234", " 2", np.nan, "-3"], name="random numbers")
+        main.show_integer_column_analysis(column)
+
     def test_show_string_column_analysis(self):
         column = pd.Series(data=[" john doe", "johnny ", np.nan, "doe", " "], name="names")
         main.show_string_column_analysis(column)
