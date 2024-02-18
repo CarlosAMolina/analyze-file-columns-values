@@ -67,6 +67,12 @@ class TestIntegerColumnAnalyzer(unittest.TestCase):
         result = analyzer.values_with_max_length()
         self.assertEqual(["-12", "12"], result)
 
+    def test_values_with_max_length_returns_original_value(self):
+        column = pd.Series(data=[" 12", "1", np.nan], name="values")
+        analyzer = main.IntegerColumnAnalyzer(column)
+        result = analyzer.values_with_max_length()
+        self.assertEqual([" 12"], result)
+
     def test_values_with_min_length_returns_expected_result(self):
         column = pd.Series(data=["12", "-1", "2", np.nan], name="values")
         analyzer = main.IntegerColumnAnalyzer(column)
