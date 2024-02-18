@@ -67,6 +67,42 @@ class TestStringColumnAnalyzer(unittest.TestCase):
         result = analysis.has_empty_values_if_no_stripped()
         self.assertTrue(result)
 
+    def test_max_length_if_stripped(self):
+        column = pd.Series(data=["a ", "b"], name="values")
+        analysis = main.StringColumnAnalyzer(column)
+        result = analysis.max_length_if_stripped()
+        self.assertEqual(1, result)
+
+    def test_max_length_if_no_stripped(self):
+        column = pd.Series(data=["a ", "b"], name="values")
+        analysis = main.StringColumnAnalyzer(column)
+        result = analysis.max_length_if_no_stripped()
+        self.assertEqual(2, result)
+
+    def test_min_length_if_stripped(self):
+        column = pd.Series(data=["a ", "bb"], name="values")
+        analysis = main.StringColumnAnalyzer(column)
+        result = analysis.min_length_if_stripped()
+        self.assertEqual(1, result)
+
+    def test_min_length_if_no_stripped(self):
+        column = pd.Series(data=["a ", "abc"], name="values")
+        analysis = main.StringColumnAnalyzer(column)
+        result = analysis.min_length_if_no_stripped()
+        self.assertEqual(2, result)
+
+    def test_max_values_if_stripped(self):
+        column = pd.Series(data=["ab ", "cd", np.nan], name="values")
+        analysis = main.StringColumnAnalyzer(column)
+        result = analysis.max_values_if_stripped()
+        self.assertEqual(["ab", "cd"], result)
+
+    def test_max_values_if_no_stripped(self):
+        column = pd.Series(data=["ab ", "cd", "abc", np.nan], name="values")
+        analysis = main.StringColumnAnalyzer(column)
+        result = analysis.max_values_if_no_stripped()
+        self.assertEqual(["ab ", "abc"], result)
+
 
 class TestIntegerColumnAnalyzer(unittest.TestCase):
     def test_has_null_values_is_false_if_no_null_values(self):
