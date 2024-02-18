@@ -49,11 +49,21 @@ class TestIntegerColumnAnalyzer(unittest.TestCase):
         result = analyzer.min_value()
         self.assertEqual(-1, result)
 
+    def test_max_length_has_expected_type(self):
+        column = pd.Series(data=["-123", "2", np.nan], name="values")
+        analysis = main.IntegerColumnAnalyzer(column)
+        self.assertEqual(np.int64, type(analysis.max_length()))
+
     def test_max_length_is_not_affected_by_negative_numbers(self):
         column = pd.Series(data=["-123", "2", np.nan], name="values")
         analyzer = main.IntegerColumnAnalyzer(column)
         result = analyzer.max_length()
         self.assertEqual(3, result)
+
+    def test_min_length_has_expected_type(self):
+        column = pd.Series(data=["-123", "2", np.nan], name="values")
+        analysis = main.IntegerColumnAnalyzer(column)
+        self.assertEqual(np.int64, type(analysis.min_length()))
 
     def test_min_length_is_not_affected_by_negative_numbers(self):
         column = pd.Series(data=["-2", "12", np.nan], name="values")
