@@ -172,7 +172,6 @@ class DecimalColumnAnalyzer:
 
     def _get_df_add_analysis_columns(self) -> Df:
         # TODO manage if string column with different millar and decimal sepparator signs
-        # TODO when working with decimal part, workt with it as string to not remove trailing 0
         result = Df(self._column)
         result[f"{self._column_name}_numeric"] = [decimal.Decimal(value) for value in result[self._column_name]]
         result[f"{self._column_name}_numeric_str"] = [
