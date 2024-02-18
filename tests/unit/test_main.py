@@ -30,6 +30,20 @@ class TestFileIsReadAsExpected(unittest.TestCase):
         pd.testing.assert_series_equal(expected_result, result)
 
 
+class TestStringColumnAnalyzer(unittest.TestCase):
+    def test_has_null_values_is_false_if_no_null_values(self):
+        column = pd.Series(["a", "b"])
+        analysis = main.StringColumnAnalyzer(column)
+        result = analysis.has_null_values()
+        self.assertFalse(result)
+
+    def test_has_null_values_is_false_if_null_values(self):
+        column = pd.Series(["a", np.nan])
+        analysis = main.StringColumnAnalyzer(column)
+        result = analysis.has_null_values()
+        self.assertTrue(result)
+
+
 class TestIntegerColumnAnalyzer(unittest.TestCase):
     def test_has_null_values_is_false_if_no_null_values(self):
         column = pd.Series(["1"])
