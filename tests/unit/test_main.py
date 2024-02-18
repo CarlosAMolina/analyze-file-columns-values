@@ -127,6 +127,12 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         self.assertEqual(np.int64, type(analisis.max_length_of_decimal_part()))
 
     def test_max_length_of_decimal_part_if_no_decimal(self):
+        column = pd.Series(data=["12"], name="values")
+        analisis = main.DecimalColumnAnalyzer(column)
+        result = analisis.max_length_of_decimal_part()
+        self.assertEqual(0, result)
+
+    def test_max_length_of_decimal_part_if_no_decimal_with_e_number(self):
         column = pd.Series(data=["-1.2e1"], name="values")
         analisis = main.DecimalColumnAnalyzer(column)
         result = analisis.max_length_of_decimal_part()
