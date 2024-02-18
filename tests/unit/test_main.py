@@ -8,14 +8,6 @@ import numpy as np
 from src import main
 
 
-# TODO class TestIntegerColumnAnalyzer(unittest.TestCase):
-# TODO     def test_has_null_values_is_false_if_no_null_values(self):
-# TODO         column = pd.Series(["1.1"])
-# TODO         analyzer = main.DecimalColumnAnalyzer(column)
-# TODO         result = analyzer.has_null_values()
-# TODO         self.assertFalse(result)
-
-
 class TestFileIsReadAsExpected(unittest.TestCase):
     def test_integer_column(self):
         column_name = "value"
@@ -30,6 +22,20 @@ class TestFileIsReadAsExpected(unittest.TestCase):
             data=["3.4", " 12345.12340", " 1.234512340e4", "3", np.nan, "-12345.1"], name=column_name
         )
         pd.testing.assert_series_equal(expected_result, result)
+
+
+class TestIntegerColumnAnalyzer(unittest.TestCase):
+    def test_has_null_values_is_false_if_no_null_values(self):
+        column = pd.Series(["1"])
+        analyzer = main.IntegerColumnAnalyzer(column)
+        result = analyzer.has_null_values()
+        self.assertFalse(result)
+
+    def test_has_null_values_is_false_if_null_values(self):
+        column = pd.Series(["1", np.nan])
+        analyzer = main.IntegerColumnAnalyzer(column)
+        result = analyzer.has_null_values()
+        self.assertTrue(result)
 
 
 class TestDecimalColumnAnalyzer(unittest.TestCase):
