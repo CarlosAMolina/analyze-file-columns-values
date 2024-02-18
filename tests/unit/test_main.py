@@ -101,6 +101,23 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(3, analisis.max_length_of_integer_part())
 
+    def test_max_length_of_integer_part_if_is_e_number_negative_drops_integer(self):
+        column = pd.Series(data=["1.1e-1"], name="values")
+        analisis = main.DecimalColumnAnalyzer(column)
+        self.assertEqual(1, analisis.max_length_of_integer_part())
+
+    def test_df_int_part_is_0_if_e_number_negative_drops_integer(self):
+        column = pd.Series(data=["1.1e-1"], name="values")
+        analysis = main.DecimalColumnAnalyzer(column)
+        analysis_columns_df = analysis._df
+        result = analysis_columns_df[f"{analysis._column_name}_int"][0]
+        self.assertEqual(0, result)
+
+    def test_values_with_max_length_of_integer_part_if_is_e_number_negative_drops_integer(self):
+        column = pd.Series(data=["1.1e-1"], name="values")
+        analisis = main.DecimalColumnAnalyzer(column)
+        self.assertEqual(["1.1e-1"], analisis.values_with_max_length_of_integer_part())
+
     def test_values_with_max_length_of_integer_part_is_not_afected_by_sign(self):
         column = pd.Series(data=["-1234.123", "1234.123", "11.1"], name="values")
         analisis = main.DecimalColumnAnalyzer(column)
