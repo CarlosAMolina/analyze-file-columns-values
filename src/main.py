@@ -153,8 +153,9 @@ class DecimalColumnAnalyzer:
     def max_length_of_integer_part(self) -> int:
         return self._df[f"{self._column_name}_int_length"].max()
 
-    def max_length_of_decimal_part(self) -> int:
-        return self._df[f"{self._column_name}_decimal_length"].max()
+    def max_length_of_decimal_part(self) -> tp.Optional[int]:
+        max_lenght = self._df[f"{self._column_name}_decimal_length"].max()
+        return None if pd.isna(max_lenght) else max_lenght
 
     def values_with_max_length_of_integer_part(self) -> tp.List[str]:
         condition = self._df[f"{self._column_name}_int_length"] == self.max_length_of_integer_part()

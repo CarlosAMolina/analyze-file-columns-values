@@ -121,12 +121,22 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(["12.3e1", "111.1"], analisis.values_with_max_length_of_integer_part())
 
-    # TODO check trailing 0 is not removed when working with decimal parts.
-
     def test_max_length_of_decimal_part_has_expected_type(self):
         column = pd.Series(data=["-1.2e1", "-13.1"], name="values")
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(np.int64, type(analisis.max_length_of_decimal_part()))
+
+    def test_max_length_of_decimal_part_if_no_decimal_returns_none(self):
+        column = pd.Series(data=["-1.2e1"], name="values")
+        analisis = main.DecimalColumnAnalyzer(column)
+        result = analisis.max_length_of_decimal_part()
+        self.assertIsNone(result)
+
+    # def test_values_with_max_length_of_decimal_part_does_not_add_decimals(self):
+    #    column = pd.Series(data=["-1.2e1"], name="values")
+    #    analisis = main.DecimalColumnAnalyzer(column)
+    #    self.assertEqual(np.int64, type(analisis.values_with_max_length_of_decimal_part()))
+    # TODO check trailing 0 is not removed when working with decimal parts.
 
 
 class TestAnalyzerClassesReadFromFile(unittest.TestCase):
