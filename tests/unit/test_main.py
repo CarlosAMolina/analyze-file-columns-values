@@ -9,10 +9,12 @@ from src import main
 
 
 class TestFileIsReadAsExpected(unittest.TestCase):
-    def test_string_column(self):
+    def test_decimal_column(self):
         column_name = "value"
-        result = get_df_from_csv_test_file("all_possible_string_values.csv")[column_name]
-        expected_result = pd.Series(data=[" a", "b ", np.nan, " c ", " a b  ", " "], name=column_name)
+        result = get_df_from_csv_test_file("all_possible_decimal_values.csv")[column_name]
+        expected_result = pd.Series(
+            data=["3.4", " 12345.12340", " 1.234512340e4", "3", np.nan, "-12345.1"], name=column_name
+        )
         pd.testing.assert_series_equal(expected_result, result)
 
     def test_integer_column(self):
@@ -21,12 +23,10 @@ class TestFileIsReadAsExpected(unittest.TestCase):
         expected_result = pd.Series(data=["1234", " 2", np.nan, "-3"], name=column_name)
         pd.testing.assert_series_equal(expected_result, result)
 
-    def test_decimal_column(self):
+    def test_string_column(self):
         column_name = "value"
-        result = get_df_from_csv_test_file("all_possible_decimal_values.csv")[column_name]
-        expected_result = pd.Series(
-            data=["3.4", " 12345.12340", " 1.234512340e4", "3", np.nan, "-12345.1"], name=column_name
-        )
+        result = get_df_from_csv_test_file("all_possible_string_values.csv")[column_name]
+        expected_result = pd.Series(data=[" a", "b ", np.nan, " c ", " a b  ", " "], name=column_name)
         pd.testing.assert_series_equal(expected_result, result)
 
 
