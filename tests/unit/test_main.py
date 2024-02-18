@@ -347,6 +347,14 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         analysis = main.DecimalColumnAnalyzer(column)
         self.assertEqual([" 1.12"], analysis.values_with_max_length_of_decimal_part())
 
+    def test_get_df_add_analysis_columns_works_with_capital_e(self):
+        column_name = "values"
+        column = pd.Series(data=["1.12e1", "1.123E2"], name=column_name)
+        analysis = main.DecimalColumnAnalyzer(column)
+        df = analysis._get_df_add_analysis_columns()
+        expected_result = pd.Series(data=["11.2", "112.3"], name=f"{column_name}_numeric_str")
+        pd.testing.assert_series_equal(expected_result, df[f"{column_name}_numeric_str"])
+
 
 class TestAnalyzerClassesReadFromFile(unittest.TestCase):
     def setUp(self):
@@ -404,7 +412,6 @@ class TestAnalyzerClassesReadFromFile(unittest.TestCase):
         self.assertEqual(np.int64, type(analysis.max_length_of_decimal_part()))
         self.assertEqual(5, analysis.max_length_of_decimal_part())
         self.assertEqual([" 12345.12340", " 1.234512340e4"], analysis.values_with_max_length_of_decimal_part())
-        # TODO check values with E (capital e)
 
 
 def get_df_from_csv_test_file(file_name: str) -> Df:
