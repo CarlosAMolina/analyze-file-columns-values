@@ -8,7 +8,21 @@ import numpy as np
 from src import main
 
 
+# TODO class TestIntegerColumnAnalyzer(unittest.TestCase):
+# TODO     def test_has_null_values_is_false_if_no_null_values(self):
+# TODO         column = pd.Series(["1.1"])
+# TODO         analyzer = main.DecimalColumnAnalyzer(column)
+# TODO         result = analyzer.has_null_values()
+# TODO         self.assertFalse(result)
+
+
 class TestFileIsReadAsExpected(unittest.TestCase):
+    def test_integer_column(self):
+        column_name = "value"
+        result = get_df_from_csv_test_file("all_possible_integer_values.csv")[column_name]
+        expected_result = pd.Series(data=["1234", " 2", np.nan, "-3"], name=column_name)
+        pd.testing.assert_series_equal(expected_result, result)
+
     def test_decimal_column(self):
         column_name = "value"
         result = get_df_from_csv_test_file("all_possible_decimal_values.csv")[column_name]
