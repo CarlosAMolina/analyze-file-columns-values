@@ -91,7 +91,7 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(3, analisis.max_length_of_integer_part())
 
-    def test_max_length_of_integer_part_if_is_e_number(self):
+    def test_max_length_of_integer_part_if_e_number_adds_trailing_0(self):
         column = pd.Series(data=["12.3e2", "33.1"], name="values")
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(4, analisis.max_length_of_integer_part())
@@ -149,30 +149,30 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         result = analisis.max_length_of_decimal_part()
         self.assertEqual(0, result)
 
-    def test_max_length_of_decimal_part_if_no_decimal_with_e_number(self):
+    def test_max_length_of_decimal_part_if_e_number_drops_decimal(self):
         column = pd.Series(data=["-1.2e1"], name="values")
         analisis = main.DecimalColumnAnalyzer(column)
         result = analisis.max_length_of_decimal_part()
         self.assertEqual(0, result)
 
-    def test_max_length_of_decimal_part_does_not_remove_trailing_0(self):
+    def test_max_length_of_decimal_part_does_not_drop_trailing_0(self):
         column = pd.Series(data=["-12.250", "1.11"], name="values")
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(3, analisis.max_length_of_decimal_part())
 
-    def test_df_decimal_value_does_not_remove_trailing_0_with_e_number(self):
+    def test_df_decimal_value_does_not_drop_trailing_0_with_e_number(self):
         column = pd.Series(data=["1.120e1"], name="values")
         analisis = main.DecimalColumnAnalyzer(column)
         analysis_columns_df = analisis._df
         result = analysis_columns_df[f"{analisis._column_name}_decimal"][0]
         self.assertEqual(20, result)
 
-    def test_max_length_of_decimal_part_does_not_remove_trailing_0_with_e_number(self):
+    def test_max_length_of_decimal_part_does_not_drop_trailing_0_with_e_number(self):
         column = pd.Series(data=["1.120e1"], name="values")
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(2, analisis.max_length_of_decimal_part())
 
-    def test_max_length_of_decimal_part_does_not_remove_trailing_0_with_e_number_negative(self):
+    def test_max_length_of_decimal_part_does_not_drop_trailing_0_with_e_number_negative(self):
         column = pd.Series(data=["12.120e-1"], name="values")
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(4, analisis.max_length_of_decimal_part())
