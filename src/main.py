@@ -110,14 +110,6 @@ class IntegerColumnAnalyzer:
     def min_length(self) -> int:
         return self._df[f"{self._column_name}_length"].min()
 
-    def values_with_max_length(self) -> tp.List[str]:
-        condition = self._df[f"{self._column_name}_length"] == self.max_length()
-        return get_unique_values_of_column(self._column_name, condition, self._df)
-
-    def values_with_min_length(self) -> tp.List[str]:
-        condition = self._df[f"{self._column_name}_length"] == self.min_length()
-        return get_unique_values_of_column(self._column_name, condition, self._df)
-
     @property
     def _df(self) -> Df:
         if self._df_to_analyze is None:
