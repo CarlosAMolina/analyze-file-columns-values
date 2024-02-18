@@ -8,6 +8,12 @@ import numpy as np
 from src import main
 
 
+class TestShowAnalysis(unittest.TestCase):
+    def test_show_string_column_analysis(self):
+        column = pd.Series(data=[" john doe", "johnny ", np.nan, "doe", " "], name="names")
+        main.show_string_column_analysis(column)
+
+
 class TestFileIsReadAsExpected(unittest.TestCase):
     def test_decimal_column(self):
         column_name = "value"
