@@ -148,6 +148,11 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(2, analisis.max_length_of_decimal_part())
 
+    def test_max_length_of_decimal_part_does_not_remove_trailing_0_with_e_number_negative(self):
+        column = pd.Series(data=["12.120e-1"], name="values")
+        analisis = main.DecimalColumnAnalyzer(column)
+        self.assertEqual(4, analisis.max_length_of_decimal_part())
+
 
 #        # Check trailing 0 is not deleted
 #        self.assertEqual(5, analisis.max_length_of_decimal_part())
