@@ -55,11 +55,17 @@ class TestStringColumnAnalyzer(unittest.TestCase):
         result = analysis.has_empty_values_if_stripped()
         self.assertFalse(result)
 
-    def test_has_empty_values_if_no_stripped_is_true(self):
+    def test_has_empty_values_if_no_stripped_is_false(self):
         column = pd.Series(data=[" "], name="values")
         analysis = main.StringColumnAnalyzer(column)
         result = analysis.has_empty_values_if_no_stripped()
         self.assertFalse(result)
+
+    def test_has_empty_values_if_no_stripped_is_true(self):
+        column = pd.Series(data=[""], name="values")
+        analysis = main.StringColumnAnalyzer(column)
+        result = analysis.has_empty_values_if_no_stripped()
+        self.assertTrue(result)
 
 
 class TestIntegerColumnAnalyzer(unittest.TestCase):
