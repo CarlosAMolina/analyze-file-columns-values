@@ -126,22 +126,32 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(np.int64, type(analisis.max_length_of_decimal_part()))
 
-    def test_max_length_of_decimal_part_if_no_decimal_returns_none(self):
+    def test_max_length_of_decimal_part_if_no_decimal(self):
         column = pd.Series(data=["-1.2e1"], name="values")
         analisis = main.DecimalColumnAnalyzer(column)
         result = analisis.max_length_of_decimal_part()
-        self.assertIsNone(result)
+        self.assertEqual(0, result)
 
     def test_max_length_of_decimal_part_does_not_remove_trailing_0(self):
         column = pd.Series(data=["-12.250", "1.11"], name="values")
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(3, analisis.max_length_of_decimal_part())
 
-    # def test_values_with_max_length_of_decimal_part_does_not_add_decimals(self):
-    #    column = pd.Series(data=["-1.2e1"], name="values")
-    #    analisis = main.DecimalColumnAnalyzer(column)
-    #    self.assertEqual(np.int64, type(analisis.values_with_max_length_of_decimal_part()))
-    # TODO check trailing 0 is not removed when working with decimal parts.
+    def test_max_length_of_decimal_part_does_not_remove_trailing_0_with_e_number(self):
+        column = pd.Series(data=["1.120e1"], name="values")
+        analisis = main.DecimalColumnAnalyzer(column)
+        self.assertEqual(2, analisis.max_length_of_decimal_part())
+
+
+#        # Check trailing 0 is not deleted
+#        self.assertEqual(5, analisis.max_length_of_decimal_part())
+#        self.assertEqual([" 12345.12340", " 1.234512340e4"], analisis.values_with_max_length_of_decimal_part())
+
+# def test_values_with_max_length_of_decimal_part_does_not_add_decimals(self):
+#    column = pd.Series(data=["-1.2e1"], name="values")
+#    analisis = main.DecimalColumnAnalyzer(column)
+#    self.assertEqual(np.int64, type(analisis.values_with_max_length_of_decimal_part()))
+# TODO check trailing 0 is not removed when working with decimal parts.
 
 
 class TestAnalyzerClassesReadFromFile(unittest.TestCase):
