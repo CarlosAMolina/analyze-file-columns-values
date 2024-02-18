@@ -132,6 +132,11 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         result = analisis.max_length_of_decimal_part()
         self.assertIsNone(result)
 
+    def test_max_length_of_decimal_part_does_not_remove_trailing_0(self):
+        column = pd.Series(data=["-12.250", "1.11"], name="values")
+        analisis = main.DecimalColumnAnalyzer(column)
+        self.assertEqual(3, analisis.max_length_of_decimal_part())
+
     # def test_values_with_max_length_of_decimal_part_does_not_add_decimals(self):
     #    column = pd.Series(data=["-1.2e1"], name="values")
     #    analisis = main.DecimalColumnAnalyzer(column)
