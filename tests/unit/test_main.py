@@ -138,6 +138,11 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         analysis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(["12.3e1", "111.1"], analysis.values_with_max_length_of_integer_part())
 
+    def test_values_with_max_length_of_integer_part_returns_original_value_without_modifications(self):
+        column = pd.Series(data=[" 12.1", "1"], name="values")
+        analysis = main.DecimalColumnAnalyzer(column)
+        self.assertEqual([" 12.1"], analysis.values_with_max_length_of_decimal_part())
+
     def test_max_length_of_decimal_part_has_expected_type(self):
         column = pd.Series(data=["-1.2e1", "-13.1"], name="values")
         analysis = main.DecimalColumnAnalyzer(column)
@@ -191,7 +196,7 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         analysis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(["12.123e1", "1.11", "12.1e-1"], analysis.values_with_max_length_of_decimal_part())
 
-    def test_values_with_max_length_of_decimal_returns_original_value_without_modifications(self):
+    def test_values_with_max_length_of_decimal_part_returns_original_value_without_modifications(self):
         column = pd.Series(data=[" 1.12", "1"], name="values")
         analysis = main.DecimalColumnAnalyzer(column)
         self.assertEqual([" 1.12"], analysis.values_with_max_length_of_decimal_part())
