@@ -27,26 +27,26 @@ class TestFileIsReadAsExpected(unittest.TestCase):
 class TestIntegerColumnAnalyzer(unittest.TestCase):
     def test_has_null_values_is_false_if_no_null_values(self):
         column = pd.Series(["1"])
-        analyzer = main.IntegerColumnAnalyzer(column)
-        result = analyzer.has_null_values()
+        analysis = main.IntegerColumnAnalyzer(column)
+        result = analysis.has_null_values()
         self.assertFalse(result)
 
     def test_has_null_values_is_false_if_null_values(self):
         column = pd.Series(["1", np.nan])
-        analyzer = main.IntegerColumnAnalyzer(column)
-        result = analyzer.has_null_values()
+        analysis = main.IntegerColumnAnalyzer(column)
+        result = analysis.has_null_values()
         self.assertTrue(result)
 
     def test_max_value(self):
         column = pd.Series(data=["-1", "2", np.nan], name="values")
-        analyzer = main.IntegerColumnAnalyzer(column)
-        result = analyzer.max_value()
+        analysis = main.IntegerColumnAnalyzer(column)
+        result = analysis.max_value()
         self.assertEqual(2, result)
 
     def test_min_value(self):
         column = pd.Series(data=["-1", "2", np.nan], name="values")
-        analyzer = main.IntegerColumnAnalyzer(column)
-        result = analyzer.min_value()
+        analysis = main.IntegerColumnAnalyzer(column)
+        result = analysis.min_value()
         self.assertEqual(-1, result)
 
     def test_max_length_has_expected_type(self):
@@ -56,8 +56,8 @@ class TestIntegerColumnAnalyzer(unittest.TestCase):
 
     def test_max_length_is_not_affected_by_negative_numbers(self):
         column = pd.Series(data=["-123", "2", np.nan], name="values")
-        analyzer = main.IntegerColumnAnalyzer(column)
-        result = analyzer.max_length()
+        analysis = main.IntegerColumnAnalyzer(column)
+        result = analysis.max_length()
         self.assertEqual(3, result)
 
     def test_min_length_has_expected_type(self):
@@ -67,46 +67,46 @@ class TestIntegerColumnAnalyzer(unittest.TestCase):
 
     def test_min_length_is_not_affected_by_negative_numbers(self):
         column = pd.Series(data=["-2", "12", np.nan], name="values")
-        analyzer = main.IntegerColumnAnalyzer(column)
-        result = analyzer.min_length()
+        analysis = main.IntegerColumnAnalyzer(column)
+        result = analysis.min_length()
         self.assertEqual(1, result)
 
     def test_values_with_max_length_returns_expected_result(self):
         column = pd.Series(data=["3", "-12", "12", np.nan], name="values")
-        analyzer = main.IntegerColumnAnalyzer(column)
-        result = analyzer.values_with_max_length()
+        analysis = main.IntegerColumnAnalyzer(column)
+        result = analysis.values_with_max_length()
         self.assertEqual(["-12", "12"], result)
 
     def test_values_with_max_length_returns_original_value(self):
         column = pd.Series(data=[" 12", "1", np.nan], name="values")
-        analyzer = main.IntegerColumnAnalyzer(column)
-        result = analyzer.values_with_max_length()
+        analysis = main.IntegerColumnAnalyzer(column)
+        result = analysis.values_with_max_length()
         self.assertEqual([" 12"], result)
 
     def test_values_with_min_length_returns_expected_result(self):
         column = pd.Series(data=["12", "-1", "2", np.nan], name="values")
-        analyzer = main.IntegerColumnAnalyzer(column)
-        result = analyzer.values_with_min_length()
+        analysis = main.IntegerColumnAnalyzer(column)
+        result = analysis.values_with_min_length()
         self.assertEqual(["-1", "2"], result)
 
     def test_values_with_min_length_returns_original_value(self):
         column = pd.Series(data=["12", " 1", np.nan], name="values")
-        analyzer = main.IntegerColumnAnalyzer(column)
-        result = analyzer.values_with_min_length()
+        analysis = main.IntegerColumnAnalyzer(column)
+        result = analysis.values_with_min_length()
         self.assertEqual([" 1"], result)
 
 
 class TestDecimalColumnAnalyzer(unittest.TestCase):
     def test_has_null_values_is_false_if_no_null_values(self):
         column = pd.Series(["1.1"])
-        analyzer = main.DecimalColumnAnalyzer(column)
-        result = analyzer.has_null_values()
+        analysis = main.DecimalColumnAnalyzer(column)
+        result = analysis.has_null_values()
         self.assertFalse(result)
 
     def test_has_null_values_is_false_if_null_values(self):
         column = pd.Series(["1.1", np.nan])
-        analyzer = main.DecimalColumnAnalyzer(column)
-        result = analyzer.has_null_values()
+        analysis = main.DecimalColumnAnalyzer(column)
+        result = analysis.has_null_values()
         self.assertTrue(result)
 
     def test_max_value_does_not_remove_trailing_0(self):
