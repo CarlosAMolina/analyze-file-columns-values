@@ -55,6 +55,12 @@ class TestIntegerColumnAnalyzer(unittest.TestCase):
         result = analyzer.max_length()
         self.assertEqual(3, result)
 
+    def test_min_length_is_not_affected_by_negative_numbers(self):
+        column = pd.Series(data=["-2", "12", np.nan], name="values")
+        analyzer = main.IntegerColumnAnalyzer(column)
+        result = analyzer.min_length()
+        self.assertEqual(1, result)
+
 
 class TestDecimalColumnAnalyzer(unittest.TestCase):
     def test_has_null_values_is_false_if_no_null_values(self):
