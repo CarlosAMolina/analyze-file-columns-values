@@ -405,7 +405,6 @@ class TestAnalyzerClassesReadFromFile(unittest.TestCase):
         self.assertEqual(5, analysis.max_length_of_decimal_part())
         self.assertEqual([" 12345.12340", " 1.234512340e4"], analysis.values_with_max_length_of_decimal_part())
         # TODO check values with E (capital e)
-        # TODO check values with negative e
         # TODO check with e which are the max and min integer and decimal parts
 
 
