@@ -20,29 +20,29 @@ def show_string_column_analysis(column: Series):
     print("  If values are not stripped:", analysis.has_empty_values_if_no_stripped())
     print("Values with maximum length:")
     print(
-        "  If values are stripped. Length:",
-        analysis.max_length_if_stripped(),
-        ".Values:",
-        analysis.max_values_if_stripped(),
+        "  If values are stripped. Number of characters: {}. Values: {}".format(
+            analysis.max_length_if_stripped(),
+            analysis.max_values_if_stripped(),
+        )
     )
     print(
-        "  If values are not stripped. Length:",
-        analysis.max_length_if_no_stripped(),
-        ".Values:",
-        analysis.max_values_if_no_stripped(),
+        "  If values are not stripped. Number of characters: {}. Values: {}".format(
+            analysis.max_length_if_no_stripped(),
+            analysis.max_values_if_no_stripped(),
+        )
     )
     print("Values with minimum length:")
     print(
-        "  If values are stripped. Length:",
-        analysis.min_length_if_stripped(),
-        ".Values:",
-        analysis.min_values_if_stripped(),
+        "  If values are stripped. Number of characters: {}. Values: {}".format(
+            analysis.min_length_if_stripped(),
+            analysis.min_values_if_stripped(),
+        )
     )
     print(
-        "  If values are not stripped. Length:",
-        analysis.min_length_if_no_stripped(),
-        ".Values:",
-        analysis.min_values_if_no_stripped(),
+        "  If values are not stripped. Number of characters: {}. Values: {}".format(
+            analysis.min_length_if_no_stripped(),
+            analysis.min_values_if_no_stripped(),
+        )
     )
 
 
