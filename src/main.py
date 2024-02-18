@@ -199,8 +199,8 @@ class DecimalColumnAnalyzer:
             .astype("Int64")
         )
         result[f"{self._column_name}_decimal_length"] = result[f"{self._column_name}_decimal_length"].fillna(0)
-        pd.set_option("display.max_columns", None)  # TODO rm
-        print(result)  # TODO rm
+        # pd.set_option("display.max_columns", None)  # TODO rm
+        # print(result)  # TODO rm
         return result
 
     @property
