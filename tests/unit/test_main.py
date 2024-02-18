@@ -9,6 +9,12 @@ from src import main
 
 
 class TestFileIsReadAsExpected(unittest.TestCase):
+    def test_string_column(self):
+        column_name = "value"
+        result = get_df_from_csv_test_file("all_possible_string_values.csv")[column_name]
+        expected_result = pd.Series(data=[" a", "b ", np.nan, " c ", " a b  ", " "], name=column_name)
+        pd.testing.assert_series_equal(expected_result, result)
+
     def test_integer_column(self):
         column_name = "value"
         result = get_df_from_csv_test_file("all_possible_integer_values.csv")[column_name]
