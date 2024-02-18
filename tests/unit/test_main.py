@@ -167,6 +167,15 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         result = analysis_columns_df[f"{analisis._column_name}_decimal"][0]
         self.assertEqual(20, result)
 
+    def test_df_decimal_value_is_none_for_no_decimal_values(self):
+        column = pd.Series(data=["1.2", "1"], name="values")
+        analisis = main.DecimalColumnAnalyzer(column)
+        analysis_columns_df = analisis._df
+        column_name = f"{analisis._column_name}_decimal"
+        result = analysis_columns_df[column_name]
+        expected_result = pd.Series(data=[2, np.nan], name=column_name).astype("Int64")
+        pd.testing.assert_series_equal(expected_result, result)
+
     def test_max_length_of_decimal_part_does_not_drop_trailing_0_with_e_number(self):
         column = pd.Series(data=["1.120e1"], name="values")
         analisis = main.DecimalColumnAnalyzer(column)
@@ -181,8 +190,6 @@ class TestDecimalColumnAnalyzer(unittest.TestCase):
         column = pd.Series(data=["12.123e1", "1.11", "1.1", "12.1e-1"], name="values")
         analisis = main.DecimalColumnAnalyzer(column)
         self.assertEqual(["12.123e1", "1.11", "12.1e-1"], analisis.values_with_max_length_of_decimal_part())
-
-    # TODO test methos if there are null values, exmaple, length of columns with null values != 0, must be None
 
 
 class TestAnalyzerClassesReadFromFile(unittest.TestCase):
