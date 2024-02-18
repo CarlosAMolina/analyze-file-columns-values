@@ -11,7 +11,30 @@ def get_df_from_csv(path_name: str):
     return pd.read_csv(path_name, dtype=str)
 
 
+def show_decimal_column_analysis(column: Series):
+    print()
+    print(f"Analyzed decimal column: {column.name}")
+    analysis = DecimalColumnAnalyzer(column)
+    print("Are there null values?", analysis.has_null_values())
+    print("Maximum results:")
+    print("  Maximum value:", analysis.max_value())
+    print(
+        "  Integer part. Maximum number of digits: {}. Values: {}".format(
+            analysis.max_length_of_integer_part(),
+            analysis.values_with_max_length_of_integer_part(),
+        )
+    )
+    print(
+        "  Decimal part. Maximum number of digits: {}. Values: {}".format(
+            analysis.max_length_of_decimal_part(),
+            analysis.values_with_max_length_of_decimal_part(),
+        )
+    )
+    print("Minimum value:", analysis.min_value())
+
+
 def show_integer_column_analysis(column: Series):
+    print()
     print(f"Analyzed integer column: {column.name}")
     analysis = IntegerColumnAnalyzer(column)
     print("Are there null values?", analysis.has_null_values())
@@ -30,6 +53,7 @@ def show_integer_column_analysis(column: Series):
 
 
 def show_string_column_analysis(column: Series):
+    print()
     print(f"Analyzed string column: {column.name}")
     analysis = StringColumnAnalyzer(column)
     print("Are there null values?", analysis.has_null_values())
