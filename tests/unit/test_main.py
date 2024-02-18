@@ -103,6 +103,18 @@ class TestStringColumnAnalyzer(unittest.TestCase):
         result = analysis.max_values_if_no_stripped()
         self.assertEqual(["ab ", "abc"], result)
 
+    def test_min_values_if_stripped(self):
+        column = pd.Series(data=["a ", "b", "cd", np.nan], name="values")
+        analysis = main.StringColumnAnalyzer(column)
+        result = analysis.min_values_if_stripped()
+        self.assertEqual(["a", "b"], result)
+
+    def test_min_values_if_no_stripped(self):
+        column = pd.Series(data=["a ", "b", "cd", np.nan], name="values")
+        analysis = main.StringColumnAnalyzer(column)
+        result = analysis.min_values_if_no_stripped()
+        self.assertEqual(["b"], result)
+
 
 class TestIntegerColumnAnalyzer(unittest.TestCase):
     def test_has_null_values_is_false_if_no_null_values(self):
@@ -350,7 +362,6 @@ class TestAnalyzerClassesReadFromFile(unittest.TestCase):
         self.assertEqual(7, analysis.max_length_if_stripped())
         self.assertEqual(9, analysis.max_length_if_no_stripped())
         self.assertEqual(0, analysis.min_length_if_stripped())
-        self.assertEqual(1, analysis.min_length_if_no_stripped())
         self.assertEqual(1, analysis.min_length_if_no_stripped())
         self.assertEqual(["Foo Bar", "Bar Foo"], analysis.max_values_if_stripped())
         self.assertEqual([" Foo Bar "], analysis.max_values_if_no_stripped())
