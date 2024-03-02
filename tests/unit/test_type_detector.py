@@ -6,32 +6,34 @@ import pandas as pd
 from src import type_detector as td
 
 
-class TestFunction_is_integer(unittest.TestCase):
+class TestFunctionIntegerTypeAnalyzer(unittest.TestCase):
     # Note. Columns are read as strings.
-    # TODO test if row is blank space
     def test_is_column_of_this_type_is_true_if_integers(self):
         column = pd.Series(data=["1", "2"], name="values")
         self.assertTrue(td.is_integer(column))
 
     def test_is_column_of_this_type_is_true_if_integers_and_null(self):
         column = pd.Series(data=["1", np.nan], name="values")
-        self.assertTrue(td.is_integer(column))
+        self.assertTrue(td._IntegerTypeAnalyzer(column).is_column_of_this_type())
 
     def test_is_column_of_this_type_is_false_if_has_strings(self):
         column = pd.Series(data=["a", "2"], name="values")
-        self.assertFalse(td.is_integer(column))
+        self.assertFalse(td._IntegerTypeAnalyzer(column).is_column_of_this_type())
 
     def test_is_column_of_this_type_is_false_if_has_float(self):
         column = pd.Series(data=["1.0", "2"], name="values")
-        self.assertFalse(td.is_integer(column))
+        self.assertFalse(td._IntegerTypeAnalyzer(column).is_column_of_this_type())
 
     def test_is_column_of_this_type_is_true_if_white_space(self):
         column = pd.Series(data=[" ", "2"], name="values")
-        self.assertTrue(td.is_integer(column))
+        self.assertTrue(td._IntegerTypeAnalyzer(column).is_column_of_this_type())
 
     def test_is_column_of_this_type_is_true_if_trail_and_lead_white_space(self):
         column = pd.Series(data=[" 1", "2 "], name="values")
-        self.assertTrue(td.is_integer(column))
+        self.assertTrue(td._IntegerTypeAnalyzer(column).is_column_of_this_type())
+
+    def _get_analyzer(self, column: pd.Series) -> td._IntegerTypeAnalyzer:
+        return td._IntegerTypeAnalyzer(column)
 
 
 # TODO test decimal if e and E
