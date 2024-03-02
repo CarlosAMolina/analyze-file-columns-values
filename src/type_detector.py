@@ -49,6 +49,8 @@ class _DecimalTypeDetector:
 
 
 def _is_numeric_column(column: Series) -> bool:
+    # TODO. Conflict with the logic when analyzing the column values because
+    # withe spaces are not tripped when reading the csv file
     column_stripped = column.str.strip()
     return _get_column_as_numeric(column_stripped) is not None
 
