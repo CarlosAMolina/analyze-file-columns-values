@@ -40,9 +40,9 @@ class TestIntegerTypeAnalyzer(unittest.TestCase):
         column = pd.Series(data=[" 1.001e1", "2 "], name="values")
         self.assertFalse(ta._IntegerTypeAnalyzer(column).is_column_of_this_type())
 
-    # TODO def test_is_column_of_this_type_is_false_if_negative_e(self):
-    # TODO     column = pd.Series(data=[" 1e-1", "2 "], name="values")
-    # TODO     self.assertFalse(ta._IntegerTypeAnalyzer(column).is_column_of_this_type())
+    def test_is_column_of_this_type_is_false_if_negative_e(self):
+        column = pd.Series(data=[" 1e-1", "2 "], name="values")
+        self.assertFalse(ta._IntegerTypeAnalyzer(column).is_column_of_this_type())
 
 
 # TODO test decimal if e and E
