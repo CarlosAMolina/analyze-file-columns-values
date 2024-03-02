@@ -27,12 +27,7 @@ class _IntegerTypeAnalyzer:
         elif _has_column_any_character(self._column_strings):
             e_analyzer = _ENumericColumnAnalyzer(self._column_strings)
             if e_analyzer._are_all_characters_e():
-                column_numeric = _get_column_as_numeric(self._column_strings)
-                # Convert to numeric an integer adds `.0`.
-                column_numeric_str = column_numeric.astype(str)
-                print(column_numeric_str)
-                decimal_values: pd.Series[str] = column_numeric_str.str.split(pat=".", expand=True)[1]
-                return (decimal_values == "0").all()
+                return _has_numeric_column_with_e_numbers_only_int_numbers(self._column_strings)
             else:
                 return False
         return True
