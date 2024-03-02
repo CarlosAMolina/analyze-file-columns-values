@@ -48,16 +48,16 @@ class _DecimalTypeAnalyzer:
 
 
 def _is_numeric_column(column: pd.Series) -> bool:
-    # TODO. Conflict with the logic when analyzing the column values because
-    # withe spaces are not tripped when reading the csv file
-    column_stripped = column.str.strip()
-    return _get_column_as_numeric(column_stripped) is not None
+    return _get_column_as_numeric(column) is not None
 
 
 # TODO rm and work only with _is_numeric_column?
 def _get_column_as_numeric(column: pd.Series) -> tp.Optional[pd.Series]:
+    # TODO. Conflict with the logic when analyzing the column values because
+    # withe spaces are not tripped when reading the csv file
+    column_stripped = column.str.strip()
     try:
-        return pd.to_numeric(column, errors="raise")
+        return pd.to_numeric(column_stripped, errors="raise")
     except ValueError:
         return None
 

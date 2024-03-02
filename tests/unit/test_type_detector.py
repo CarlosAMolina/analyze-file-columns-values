@@ -56,10 +56,10 @@ class TestDecimalTypeAnalyzer(unittest.TestCase):
         column = pd.Series(data=["1.0", "2"], name="values")
         self.assertTrue(ta._DecimalTypeAnalyzer(column).is_column_of_this_type())
 
-    # def test_is_column_of_this_type_is_true_if_white_space(self):
-    #    column = pd.Series(data=[" ", "2.0"], name="values")
-    #    self.assertTrue(ta._DecimalTypeAnalyzer(column).is_column_of_this_type())
+    def test_is_column_of_this_type_is_true_if_white_space(self):
+        column = pd.Series(data=[" ", "2.0"], name="values")
+        self.assertTrue(ta._DecimalTypeAnalyzer(column).is_column_of_this_type())
 
-    # def test_is_column_of_this_type_is_true_if_trail_and_lead_white_space(self):
-    #    column = pd.Series(data=[" 1", "2 "], name="values")
-    #    self.assertTrue(ta._DecimalTypeAnalyzer(column).is_column_of_this_type())
+    def test_is_column_of_this_type_is_true_if_trail_and_lead_white_space(self):
+        column = pd.Series(data=[" 1.1", "2 "], name="values")
+        self.assertTrue(ta._DecimalTypeAnalyzer(column).is_column_of_this_type())
