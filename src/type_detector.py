@@ -13,7 +13,7 @@ def is_decimal(column_strings: Series):
     return _DecimalTypeDetector(column_strings).is_column_of_this_type()
 
 
-REGEX_FLOAT_CHARACTERS = r"\."
+REGEX_DECIMAL_SEPARATOR = r"\."
 
 
 class _IntegerTypeDetector:
@@ -26,15 +26,15 @@ class _IntegerTypeDetector:
             return False
         elif self._has_any_character():
             return False
-        elif self._has_any_float_character():
+        elif self._has_any_decimal_separator():
             return False
         return True
 
     def _has_any_character(self) -> bool:
         return self._column_strings.str.contains(r"[a-z]", flags=re.IGNORECASE, regex=True).any()
 
-    def _has_any_float_character(self) -> bool:
-        return self._column_strings.str.contains(REGEX_FLOAT_CHARACTERS, flags=re.IGNORECASE, regex=True).any()
+    def _has_any_decimal_separator(self) -> bool:
+        return self._column_strings.str.contains(REGEX_DECIMAL_SEPARATOR, flags=re.IGNORECASE, regex=True).any()
 
 
 class _DecimalTypeDetector:
