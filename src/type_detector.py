@@ -49,7 +49,8 @@ class _DecimalTypeDetector:
 
 
 def _is_numeric_column(column: Series) -> bool:
-    return _get_column_as_numeric(column) is not None
+    column_stripped = column.str.strip()
+    return _get_column_as_numeric(column_stripped) is not None
 
 
 # TODO rm and work only with _is_numeric_column?
