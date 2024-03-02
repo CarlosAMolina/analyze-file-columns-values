@@ -35,19 +35,6 @@ class _IntegerTypeAnalyzer:
         return self._column_strings.str.contains(REGEX_DECIMAL_SEPARATOR, flags=re.IGNORECASE, regex=True).any()
 
 
-def _has_column_any_character(column: "pd.Series[str]") -> bool:
-    return _has_row_any_character(column).any()
-
-
-def _has_row_any_character(column: "pd.Series[str]") -> "pd.Series[bool]":
-    return column.str.contains(r"[a-z]", flags=re.IGNORECASE, regex=True)
-
-
-def _are_all_characters_e(column: "pd.Series[str]") -> bool:
-    rows_with_characters = column[_has_row_any_character(column)]
-    return not rows_with_characters.str.contains(r"[a-d]|[f-z]", flags=re.IGNORECASE, regex=True).all()
-
-
 class _DecimalTypeAnalyzer:
     def __init__(self, column_strings: "pd.Series[str]"):
         self._column_strings = column_strings
@@ -63,6 +50,19 @@ class _DecimalTypeAnalyzer:
                 return False
         else:
             return column_numeric.dtype == "float64"
+
+
+def _has_column_any_character(column: "pd.Series[str]") -> bool:
+    return _has_row_any_character(column).any()
+
+
+def _has_row_any_character(column: "pd.Series[str]") -> "pd.Series[bool]":
+    return column.str.contains(r"[a-z]", flags=re.IGNORECASE, regex=True)
+
+
+def _are_all_characters_e(column: "pd.Series[str]") -> bool:
+    rows_with_characters = column[_has_row_any_character(column)]
+    return not rows_with_characters.str.contains(r"[a-d]|[f-z]", flags=re.IGNORECASE, regex=True).all()
 
 
 def _has_numeric_column_with_e_numbers_only_int_numbers(column: "pd.Series[str]") -> bool:
