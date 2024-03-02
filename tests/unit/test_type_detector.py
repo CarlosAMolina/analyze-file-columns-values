@@ -39,3 +39,7 @@ class TestDecimalTypeAnalyzer(unittest.TestCase):
     def test_is_column_of_this_type_is_false_if_integers(self):
         column = pd.Series(data=["1", "2"], name="values")
         self.assertFalse(td._DecimalTypeAnalyzer(column).is_column_of_this_type())
+
+    def test_is_column_of_this_type_is_true_if_floats(self):
+        column = pd.Series(data=["1.1", "2.2"], name="values")
+        self.assertTrue(td._DecimalTypeAnalyzer(column).is_column_of_this_type())
