@@ -16,7 +16,7 @@ REGEX_DECIMAL_SEPARATOR = r"\."
 
 
 class _IntegerTypeAnalyzer:
-    def __init__(self, column_strings: pd.Series):
+    def __init__(self, column_strings: "pd.Series[str]"):
         self._column_strings = column_strings
 
     def is_column_of_this_type(self) -> bool:
@@ -59,7 +59,7 @@ class _ENumericColumnAnalyzer:
 
 
 class _DecimalTypeAnalyzer:
-    def __init__(self, column_strings: pd.Series):
+    def __init__(self, column_strings: "pd.Series[str]"):
         self._column_strings = column_strings
 
     def is_column_of_this_type(self) -> bool:
@@ -70,17 +70,19 @@ class _DecimalTypeAnalyzer:
         elif _has_column_any_character(self._column_strings):
             e_analyzer = _ENumericColumnAnalyzer(self._column_strings)
             if e_analyzer._are_all_characters_e():
-                column_numeric = _get_column_as_numeric(self._column_strings)
-                # Convert to numeric an integer adds `.0`.
-                column_numeric_str = column_numeric.astype(str)
-                print(column_numeric_str)
-                decimal_values: pd.Series[str] = column_numeric_str.str.split(pat=".", expand=True)[1]
-                return not (decimal_values == "0").all()
+                return not _has_numeric_column_with_e_numbers_only_int_numbers(self._column_strings)
             else:
                 return False
-
         else:
             return column_numeric.dtype == "float64"
+
+
+def _has_numeric_column_with_e_numbers_only_int_numbers(column: "pd.Series[str]") -> bool:
+    column_numeric = _get_column_as_numeric(column)
+    column_numeric_str = column_numeric.astype(str)
+    decimal_values: pd.Series[str] = column_numeric_str.str.split(pat=".", expand=True)[1]
+    # Convert to numeric an integer adds `.0`.
+    return (decimal_values == "0").all()
 
 
 def _is_numeric_column(column: pd.Series) -> bool:
