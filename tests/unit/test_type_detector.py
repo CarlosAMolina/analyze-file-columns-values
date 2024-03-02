@@ -76,6 +76,14 @@ class TestDecimalTypeAnalyzer(unittest.TestCase):
         column = pd.Series(data=[" 1.1", "2 "], name="values")
         self.assertTrue(ta._DecimalTypeAnalyzer(column).is_column_of_this_type())
 
+    def test_is_column_of_this_type_is_true_if_e_number(self):
+        column = pd.Series(data=[" 1.12e1", "2 "], name="values")
+        self.assertTrue(ta._DecimalTypeAnalyzer(column).is_column_of_this_type())
+
+    def test_is_column_of_this_type_is_true_if_captital_e_number(self):
+        column = pd.Series(data=[" 1.12E1", "2 "], name="values")
+        self.assertTrue(ta._DecimalTypeAnalyzer(column).is_column_of_this_type())
+
     def test_is_column_of_this_type_is_false_if_e_number_is_integer(self):
         column = pd.Series(data=[" 1e1", "2 "], name="values")
         self.assertFalse(ta._DecimalTypeAnalyzer(column).is_column_of_this_type())
@@ -87,5 +95,3 @@ class TestDecimalTypeAnalyzer(unittest.TestCase):
     def test_is_column_of_this_type_is_true_if_negative_e(self):
         column = pd.Series(data=[" 1e-1", "2 "], name="values")
         self.assertTrue(ta._DecimalTypeAnalyzer(column).is_column_of_this_type())
-
-    # TODO test negative e, and capital E
