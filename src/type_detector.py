@@ -4,7 +4,15 @@ from pandas import Series
 import pandas as pd
 
 
-class IntegerTypeDetector:
+def is_integer(column_strings: Series):
+    return _IntegerTypeDetector(column_strings).is_column_of_this_type()
+
+
+def is_decimal(column_strings: Series):
+    return _DecimalTypeDetector(column_strings).is_column_of_this_type()
+
+
+class _IntegerTypeDetector:
     def __init__(self, column_strings: Series):
         self._column_strings = column_strings
 
@@ -16,7 +24,7 @@ class IntegerTypeDetector:
             return pd.api.types.is_integer_dtype(column_numeric)
 
 
-class DecimalTypeDetector:
+class _DecimalTypeDetector:
     def __init__(self, column_strings: Series):
         self._column_strings = column_strings
 
