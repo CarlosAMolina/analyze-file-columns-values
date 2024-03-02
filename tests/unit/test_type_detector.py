@@ -32,6 +32,18 @@ class TestIntegerTypeAnalyzer(unittest.TestCase):
         column = pd.Series(data=[" 1", "2 "], name="values")
         self.assertTrue(ta._IntegerTypeAnalyzer(column).is_column_of_this_type())
 
+    # TODO def test_is_column_of_this_type_is_true_if_e_number_is_not_decimal(self):
+    # TODO     column = pd.Series(data=[" 1e1", "2 "], name="values")
+    # TODO     self.assertTrue(ta._IntegerTypeAnalyzer(column).is_column_of_this_type())
+
+    # TODO def test_is_column_of_this_type_is_false_if_e_number_is_decimal(self):
+    # TODO     column = pd.Series(data=[" 1.11e1", "2 "], name="values")
+    # TODO     self.assertFalse(ta._IntegerTypeAnalyzer(column).is_column_of_this_type())
+
+    # TODO def test_is_column_of_this_type_is_false_if_negative_e(self):
+    # TODO     column = pd.Series(data=[" 1e-1", "2 "], name="values")
+    # TODO     self.assertFalse(ta._IntegerTypeAnalyzer(column).is_column_of_this_type())
+
 
 # TODO test decimal if e and E
 class TestDecimalTypeAnalyzer(unittest.TestCase):
@@ -63,3 +75,9 @@ class TestDecimalTypeAnalyzer(unittest.TestCase):
     def test_is_column_of_this_type_is_true_if_trail_and_lead_white_space(self):
         column = pd.Series(data=[" 1.1", "2 "], name="values")
         self.assertTrue(ta._DecimalTypeAnalyzer(column).is_column_of_this_type())
+
+    # TODO def test_is_column_of_this_type_is_false_if_e_number_is_integer(self):
+    # TODO     column = pd.Series(data=[" 1e1", "2 "], name="values")
+    # TODO     self.assertFalse(ta._DecimalTypeAnalyzer(column).is_column_of_this_type())
+
+    # TODO test negative e, and capital E
