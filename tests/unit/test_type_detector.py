@@ -32,8 +32,5 @@ class TestFunctionIntegerTypeAnalyzer(unittest.TestCase):
         column = pd.Series(data=[" 1", "2 "], name="values")
         self.assertTrue(td._IntegerTypeAnalyzer(column).is_column_of_this_type())
 
-    def _get_analyzer(self, column: pd.Series) -> td._IntegerTypeAnalyzer:
-        return td._IntegerTypeAnalyzer(column)
-
 
 # TODO test decimal if e and E
