@@ -32,9 +32,9 @@ class TestIntegerTypeAnalyzer(unittest.TestCase):
         column = pd.Series(data=[" 1", "2 "], name="values")
         self.assertTrue(ta._IntegerTypeAnalyzer(column).is_column_of_this_type())
 
-    # TODO def test_is_column_of_this_type_is_true_if_e_number_is_not_decimal(self):
-    # TODO     column = pd.Series(data=[" 1e1", "2 "], name="values")
-    # TODO     self.assertTrue(ta._IntegerTypeAnalyzer(column).is_column_of_this_type())
+    def test_is_column_of_this_type_is_true_if_e_number_is_not_decimal(self):
+        column = pd.Series(data=[" 1e1", "2 "], name="values")
+        self.assertTrue(ta._IntegerTypeAnalyzer(column).is_column_of_this_type())
 
     # TODO def test_is_column_of_this_type_is_false_if_e_number_is_decimal(self):
     # TODO     column = pd.Series(data=[" 1.11e1", "2 "], name="values")

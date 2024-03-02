@@ -24,15 +24,30 @@ class _IntegerTypeAnalyzer:
             return False
         elif self._has_any_decimal_separator():
             return False
-        elif self._has_any_character():
-            return False
+        elif self._has_column_any_character():
+            if self._are_all_characters_e():
+                column_numeric = _get_column_as_numeric(self._column_strings)
+                # Convert to numeric an integer adds `.0`.
+                column_numeric_str = column_numeric.astype(str)
+                print(column_numeric_str)
+                decimal_values: pd.Series[str] = column_numeric_str.str.split(pat=".", expand=True)[1]
+                return (decimal_values == "0").all()
+            else:
+                return False
         return True
 
-    def _has_any_character(self) -> bool:
-        return self._column_strings.str.contains(r"[a-z]", flags=re.IGNORECASE, regex=True).any()
+    def _has_column_any_character(self) -> bool:
+        return self._has_row_any_character().any()
+
+    def _has_row_any_character(self) -> pd.Series:
+        return self._column_strings.str.contains(r"[a-z]", flags=re.IGNORECASE, regex=True)
 
     def _has_any_decimal_separator(self) -> bool:
         return self._column_strings.str.contains(REGEX_DECIMAL_SEPARATOR, flags=re.IGNORECASE, regex=True).any()
+
+    def _are_all_characters_e(self) -> bool:
+        rows_with_characters = self._column_strings[self._has_row_any_character()]
+        return not rows_with_characters.str.contains(r"[a-d]|[f-z]", flags=re.IGNORECASE, regex=True).all()
 
 
 class _DecimalTypeAnalyzer:
