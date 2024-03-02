@@ -6,17 +6,17 @@ import pandas as pd
 
 
 def is_integer(column_strings: Series):
-    return _IntegerTypeDetector(column_strings).is_column_of_this_type()
+    return _IntegerTypeAnalyzer(column_strings).is_column_of_this_type()
 
 
 def is_decimal(column_strings: Series):
-    return _DecimalTypeDetector(column_strings).is_column_of_this_type()
+    return _DecimalTypeAnalyzer(column_strings).is_column_of_this_type()
 
 
 REGEX_DECIMAL_SEPARATOR = r"\."
 
 
-class _IntegerTypeDetector:
+class _IntegerTypeAnalyzer:
     def __init__(self, column_strings: Series):
         self._column_strings = column_strings
 
@@ -36,7 +36,7 @@ class _IntegerTypeDetector:
         return self._column_strings.str.contains(REGEX_DECIMAL_SEPARATOR, flags=re.IGNORECASE, regex=True).any()
 
 
-class _DecimalTypeDetector:
+class _DecimalTypeAnalyzer:
     def __init__(self, column_strings: Series):
         self._column_strings = column_strings
 
