@@ -22,9 +22,9 @@ class _IntegerTypeAnalyzer:
     def is_column_of_this_type(self) -> bool:
         if _is_numeric_column(self._column_strings) is False:
             return False
-        elif self._has_any_character():
-            return False
         elif self._has_any_decimal_separator():
+            return False
+        elif self._has_any_character():
             return False
         return True
 
