@@ -6,11 +6,11 @@ import pandas as pd
 from src import type_detector as td
 
 
-class TestFunctionIntegerTypeAnalyzer(unittest.TestCase):
+class TestIntegerTypeAnalyzer(unittest.TestCase):
     # Note. Columns are read as strings.
     def test_is_column_of_this_type_is_true_if_integers(self):
         column = pd.Series(data=["1", "2"], name="values")
-        self.assertTrue(td.is_integer(column))
+        self.assertTrue(td._IntegerTypeAnalyzer(column).is_column_of_this_type())
 
     def test_is_column_of_this_type_is_true_if_integers_and_null(self):
         column = pd.Series(data=["1", np.nan], name="values")
@@ -34,3 +34,8 @@ class TestFunctionIntegerTypeAnalyzer(unittest.TestCase):
 
 
 # TODO test decimal if e and E
+class TestDecimalTypeAnalyzer(unittest.TestCase):
+    # Note. Columns are read as strings.
+    def test_is_column_of_this_type_is_false_if_integers(self):
+        column = pd.Series(data=["1", "2"], name="values")
+        self.assertFalse(td._DecimalTypeAnalyzer(column).is_column_of_this_type())
