@@ -1,18 +1,23 @@
 import re
 import typing as tp
+import enum
 
 import pandas as pd
 
 
-def is_integer(column_strings: pd.Series):
-    return _IntegerTypeAnalyzer(column_strings).is_column_of_this_type()
+class Type(enum.Enum):
+    INTEGER = "integer"
+    DECIMAL = "decimal"
+    STRING = "string"
 
 
-def is_decimal(column_strings: pd.Series):
-    return _DecimalTypeAnalyzer(column_strings).is_column_of_this_type()
-
-
-REGEX_DECIMAL_SEPARATOR = r"\."
+def get_column_type(column: "pd.Series[str]") -> Type:
+    if _IntegerTypeAnalyzer(column).is_column_of_this_type():
+        return Type.INTEGER
+    elif _DecimalTypeAnalyzer(column).is_column_of_this_type():
+        return Type.DECIMAL
+    else:
+        return Type.STRING
 
 
 class _IntegerTypeAnalyzer:
@@ -34,6 +39,7 @@ class _IntegerTypeAnalyzer:
         return True
 
     def _has_any_decimal_separator(self) -> bool:
+        REGEX_DECIMAL_SEPARATOR = r"\."
         return self._column_strings.str.contains(REGEX_DECIMAL_SEPARATOR, flags=re.IGNORECASE, regex=True).any()
 
 
