@@ -45,7 +45,6 @@ class TestIntegerTypeAnalyzer(unittest.TestCase):
         self.assertFalse(ta._IntegerTypeAnalyzer(column).is_column_of_this_type())
 
 
-# TODO test decimal if e and E
 class TestDecimalTypeAnalyzer(unittest.TestCase):
     # Note. Columns are read as strings.
     def test_is_column_of_this_type_is_false_if_integers(self):
