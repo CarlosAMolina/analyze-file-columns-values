@@ -16,8 +16,11 @@ class TestFunction_show_file_analysis(unittest.TestCase):
 
 class TestFunction_get_column_names_and_types_from_df(unittest.TestCase):
     def test_expected_result_is_returned(self):
-        df = get_df_from_csv_test_file("file.csv")
-        result = [result_yield for result_yield in manager._get_column_names_and_types_from_df(df)]
+        file_df = get_df_from_csv_test_file("file.csv")
+        result = [
+            (column_name, type_analyzer.get_column_type(column_series))
+            for column_name, column_series in file_df.items()
+        ]
         expected_result = [
             ("Column string", type_analyzer.Type.STRING),
             ("Column string all lines with value", type_analyzer.Type.STRING),
