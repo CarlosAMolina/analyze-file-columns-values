@@ -1,3 +1,6 @@
+run:
+	python -m src /tmp/file.csv
+
 test:
 	python -m unittest discover -s tests
 test-filter:

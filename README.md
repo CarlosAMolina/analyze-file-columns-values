@@ -15,8 +15,9 @@ This information helps to define the SQL columns for the file.
 In the main path of the project:
 
 ```bash
-python -m src /tmp/file.csv
+make run
 ```
+
 
 ## Tests
 
