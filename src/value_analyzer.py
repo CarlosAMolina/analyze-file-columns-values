@@ -6,7 +6,7 @@ from pandas import Series
 
 
 def show_decimal_column_analysis(column: Series):
-    analysis = DecimalColumnAnalyzer(column)
+    analysis = _DecimalColumnAnalyzer(column)
     print("Are there null values?", analysis.has_null_values())
     print("Maximum results:")
     print("  Maximum value:", analysis.max_value())
@@ -26,7 +26,7 @@ def show_decimal_column_analysis(column: Series):
 
 
 def show_integer_column_analysis(column: Series):
-    analysis = IntegerColumnAnalyzer(column)
+    analysis = _IntegerColumnAnalyzer(column)
     print("Are there null values?", analysis.has_null_values())
     print(
         "Max value. Number of digits: {}. Value: {}".format(
@@ -43,7 +43,7 @@ def show_integer_column_analysis(column: Series):
 
 
 def show_string_column_analysis(column: Series):
-    analysis = StringColumnAnalyzer(column)
+    analysis = _StringColumnAnalyzer(column)
     print("Are there null values?", analysis.has_null_values())
     print("Are there empty values?")
     print("  If values are stripped:", analysis.has_empty_values_if_stripped())
@@ -76,7 +76,7 @@ def show_string_column_analysis(column: Series):
     )
 
 
-class StringColumnAnalyzer:
+class _StringColumnAnalyzer:
     def __init__(self, column: Series):
         self._column = column
         self._df_to_analyze = None  # Never call this, work with `self._df`
@@ -108,22 +108,22 @@ class StringColumnAnalyzer:
     def max_values_if_stripped(self) -> tp.List[str]:
         condition = self._df[f"{self._column_name_stripped}_length"] == self.max_length_if_stripped()
         column_name = self._column_name_stripped
-        return get_unique_values_of_column(column_name, condition, self._df)
+        return _get_unique_values_of_column(column_name, condition, self._df)
 
     def max_values_if_no_stripped(self) -> tp.List[str]:
         condition = self._df[f"{self._column_name}_length"] == self.max_length_if_no_stripped()
         column_name = self._column_name
-        return get_unique_values_of_column(column_name, condition, self._df)
+        return _get_unique_values_of_column(column_name, condition, self._df)
 
     def min_values_if_stripped(self) -> tp.List[str]:
         condition = self._df[f"{self._column_name_stripped}_length"] == self.min_length_if_stripped()
         column_name = self._column_name_stripped
-        return get_unique_values_of_column(column_name, condition, self._df)
+        return _get_unique_values_of_column(column_name, condition, self._df)
 
     def min_values_if_no_stripped(self) -> tp.List[str]:
         condition = self._df[f"{self._column_name}_length"] == self.min_length_if_no_stripped()
         column_name = self._column_name
-        return get_unique_values_of_column(column_name, condition, self._df)
+        return _get_unique_values_of_column(column_name, condition, self._df)
 
     @property
     def _df(self) -> Df:
@@ -147,7 +147,7 @@ class StringColumnAnalyzer:
         return self._column.name
 
 
-def get_unique_values_of_column(
+def _get_unique_values_of_column(
     column_name: str,
     condition: Series,
     df: Df,
@@ -155,7 +155,7 @@ def get_unique_values_of_column(
     return df.loc[condition][column_name].drop_duplicates().to_list()
 
 
-class IntegerColumnAnalyzer:
+class _IntegerColumnAnalyzer:
     def __init__(self, column: Series):
         self._column = column
         self._df_to_analyze = None  # Never call this, work with `self._df`
@@ -196,7 +196,7 @@ class IntegerColumnAnalyzer:
         return self._column.name
 
 
-class DecimalColumnAnalyzer:
+class _DecimalColumnAnalyzer:
     def __init__(self, column: Series):
         self._column = column
         self._df_to_analyze = None  # Never call this, work with `self._df`
@@ -224,11 +224,11 @@ class DecimalColumnAnalyzer:
 
     def values_with_max_length_of_integer_part(self) -> tp.List[str]:
         condition = self._df[f"{self._column_name}_int_length"] == self.max_length_of_integer_part()
-        return get_unique_values_of_column(self._column_name, condition, self._df)
+        return _get_unique_values_of_column(self._column_name, condition, self._df)
 
     def values_with_max_length_of_decimal_part(self) -> tp.List[str]:
         condition = self._df[f"{self._column_name}_decimal_length"] == self.max_length_of_decimal_part()
-        return get_unique_values_of_column(self._column_name, condition, self._df)
+        return _get_unique_values_of_column(self._column_name, condition, self._df)
 
     @property
     def _df(self) -> Df:

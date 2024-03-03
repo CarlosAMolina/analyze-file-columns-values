@@ -15,7 +15,7 @@ class TestAnalyzerClassesReadFromFile(unittest.TestCase):
     def test_string_column_if_null_values(self):
         column_name = "Column string"
         column = self.df[column_name]
-        analysis = value_analyzer.StringColumnAnalyzer(column)
+        analysis = value_analyzer._StringColumnAnalyzer(column)
         self.assertTrue(analysis.has_null_values())
         self.assertFalse(analysis.has_empty_values_if_no_stripped())
         self.assertTrue(analysis.has_empty_values_if_stripped())
@@ -31,13 +31,13 @@ class TestAnalyzerClassesReadFromFile(unittest.TestCase):
     def test_string_column_if_no_null_values(self):
         column_name = "Column string all lines with value"
         column = self.df[column_name]
-        analysis = value_analyzer.StringColumnAnalyzer(column)
+        analysis = value_analyzer._StringColumnAnalyzer(column)
         self.assertFalse(analysis.has_null_values())
 
     def test_integer_column(self):
         column_name = "Column integer"
         column = self.df[column_name]
-        analysis = value_analyzer.IntegerColumnAnalyzer(column)
+        analysis = value_analyzer._IntegerColumnAnalyzer(column)
         self.assertTrue(analysis.has_null_values())
         self.assertEqual(1111, analysis.max_value())
         self.assertEqual(np.int64, type(analysis.max_value()))
@@ -51,7 +51,7 @@ class TestAnalyzerClassesReadFromFile(unittest.TestCase):
     def test_decimal_column(self):
         column_name = "Column decimal"
         column = self.df[column_name]
-        analysis = value_analyzer.DecimalColumnAnalyzer(column)
+        analysis = value_analyzer._DecimalColumnAnalyzer(column)
         self.assertTrue(analysis.has_null_values())
         # Check trailing 0 is not deleted
         self.assertEqual(" 12345.12340", analysis.max_value())
