@@ -3,7 +3,6 @@ import typing as tp
 
 from pandas import DataFrame as Df
 from pandas import Series
-import pandas as pd
 
 
 def show_decimal_column_analysis(column: Series):
@@ -271,14 +270,8 @@ class DecimalColumnAnalyzer:
             .astype("Int64")
         )
         result[f"{self._column_name}_decimal_length"] = result[f"{self._column_name}_decimal_length"].fillna(0)
-        # print_df(result)
         return result
 
     @property
     def _column_name(self) -> str:
         return self._column.name
-
-
-def print_df(df: Df):
-    pd.set_option("display.max_columns", None)
-    print(df)

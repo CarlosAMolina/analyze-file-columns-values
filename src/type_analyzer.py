@@ -90,9 +90,3 @@ def _get_column_as_numeric(column: pd.Series) -> tp.Optional[pd.Series]:
         return pd.to_numeric(column_stripped, errors="raise")
     except ValueError:
         return None
-
-
-# TODO rm
-def print_df(df):
-    pd.set_option("display.max_columns", None)
-    print(df)
