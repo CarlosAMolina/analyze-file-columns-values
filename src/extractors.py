@@ -7,6 +7,7 @@ import pandas as pd
 def get_df_from_csv(path_name: str) -> Df:
     # Read all columns as str to not modify numeric values
     return pd.read_csv(path_name, dtype=str)
+    # return _get_df_from_cr_csv(path_name)
 
 
 def _get_df_from_cr_csv(path_name) -> Df:

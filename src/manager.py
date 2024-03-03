@@ -1,16 +1,19 @@
+import datetime
+
 from src import extractors
 from src import type_analyzer
 from src import value_analyzer
 
 
 def show_file_analysis(file_path_name: str):
-    print(f"Analyzing file {file_path_name}")
+    print("[{}] Analyzing file {}".format(datetime.datetime.now(), file_path_name))
     file_df = extractors.get_df_from_csv(file_path_name)
     column_names = file_df.columns.tolist()
     for column_name in file_df:
         print()
         print(
-            "Analyzing column {} of {}. Column name: {}".format(
+            "[{}] Analyzing column {} of {}. Column name: {}".format(
+                datetime.datetime.now(),
                 column_names.index(column_name) + 1,
                 len(column_names),
                 column_name,
