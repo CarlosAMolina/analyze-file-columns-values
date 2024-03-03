@@ -11,7 +11,7 @@ from src import type_analyzer
 class TestFunction_get_column_names_and_types_from_df(unittest.TestCase):
     def test_expected_result_is_returned(self):
         df = get_df_from_csv_test_file("file.csv")
-        result = manager.get_column_names_and_types_from_df(df)
+        result = manager._get_column_names_and_types_from_df(df)
         expected_result = {
             "Column string": type_analyzer.Type.STRING,
             "Column string all lines with value": type_analyzer.Type.STRING,
