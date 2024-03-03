@@ -117,4 +117,3 @@ class TestFunction_has_row_any_character(unittest.TestCase):
         expected_result = pd.Series(data=[False, True, False], name="values")
         result = ta._has_row_any_character(column)
         pd.testing.assert_series_equal(expected_result, result)
-
