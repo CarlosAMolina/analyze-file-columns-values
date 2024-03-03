@@ -4,7 +4,7 @@ import unittest
 from pandas import DataFrame as Df
 import numpy as np
 
-from src import file_manager
+from src import extractors
 from src import value_analyzer
 
 
@@ -70,4 +70,4 @@ def get_df_from_csv_test_file(file_name: str) -> Df:
     script_dir = pathlib.Path(__file__).parent.absolute()
     tests_dir = script_dir.parent
     csv_file_path_name = str(pathlib.PurePath(tests_dir, "files", file_name))
-    return file_manager.get_df_from_csv(csv_file_path_name)
+    return extractors.get_df_from_csv(csv_file_path_name)
