@@ -10,7 +10,7 @@ def show_file_analysis(file_path_name: str):
         print()
         print(f"Analyzed column name: {column.name}")
         column_type = type_analyzer.get_column_type(column)
-        print(f"Column type: {column_type}")
+        print(f"Column type: {column_type.value}")
         if column_type == type_analyzer.Type.DECIMAL:
             value_analyzer.show_decimal_column_analysis(column)
         elif column_type == type_analyzer.Type.INTEGER:
