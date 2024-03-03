@@ -2,68 +2,32 @@ import pathlib
 import unittest
 
 from pandas import DataFrame as Df
+import pandas as pd
 import numpy as np
 
 from src import extractors
-from src import value_analyzer
 
 
-class TestAnalyzerClassesReadFromFile(unittest.TestCase):
-    def setUp(self):
-        self.df = get_df_from_csv_test_file("file.csv")
-
-    def test_string_column_if_null_values(self):
-        column_name = "Column string"
-        column = self.df[column_name]
-        analysis = value_analyzer.StringColumnAnalyzer(column)
-        self.assertTrue(analysis.has_null_values())
-        self.assertFalse(analysis.has_empty_values_if_no_stripped())
-        self.assertTrue(analysis.has_empty_values_if_stripped())
-        self.assertEqual(7, analysis.max_length_if_stripped())
-        self.assertEqual(9, analysis.max_length_if_no_stripped())
-        self.assertEqual(0, analysis.min_length_if_stripped())
-        self.assertEqual(1, analysis.min_length_if_no_stripped())
-        self.assertEqual(["Foo Bar", "Bar Foo"], analysis.max_values_if_stripped())
-        self.assertEqual([" Foo Bar "], analysis.max_values_if_no_stripped())
-        self.assertEqual([""], analysis.min_values_if_stripped())
-        self.assertEqual([" "], analysis.min_values_if_no_stripped())
-
-    def test_string_column_if_no_null_values(self):
-        column_name = "Column string all lines with value"
-        column = self.df[column_name]
-        analysis = value_analyzer.StringColumnAnalyzer(column)
-        self.assertFalse(analysis.has_null_values())
+class TestFileIsReadAsExpected(unittest.TestCase):
+    def test_decimal_column(self):
+        column_name = "value"
+        result = get_df_from_csv_test_file("all_possible_decimal_values.csv")[column_name]
+        expected_result = pd.Series(
+            data=["3.4", " 12345.12340", " 1.234512340e4", "3", np.nan, "-12345.1"], name=column_name
+        )
+        pd.testing.assert_series_equal(expected_result, result)
 
     def test_integer_column(self):
-        column_name = "Column integer"
-        column = self.df[column_name]
-        analysis = value_analyzer.IntegerColumnAnalyzer(column)
-        self.assertTrue(analysis.has_null_values())
-        self.assertEqual(1111, analysis.max_value())
-        self.assertEqual(np.int64, type(analysis.max_value()))
-        self.assertEqual(1, analysis.min_value())
-        self.assertEqual(np.int64, type(analysis.min_value()))
-        self.assertEqual(4, analysis.max_length())
-        self.assertEqual(np.int64, type(analysis.max_length()))
-        self.assertEqual(1, analysis.min_length())
-        self.assertEqual(np.int64, type(analysis.min_length()))
+        column_name = "value"
+        result = get_df_from_csv_test_file("all_possible_integer_values.csv")[column_name]
+        expected_result = pd.Series(data=["1234", " 2", np.nan, "-3"], name=column_name)
+        pd.testing.assert_series_equal(expected_result, result)
 
-    def test_decimal_column(self):
-        column_name = "Column decimal"
-        column = self.df[column_name]
-        analysis = value_analyzer.DecimalColumnAnalyzer(column)
-        self.assertTrue(analysis.has_null_values())
-        # Check trailing 0 is not deleted
-        self.assertEqual(" 12345.12340", analysis.max_value())
-        self.assertEqual("-12345.1", analysis.min_value())
-        self.assertEqual(np.int64, type(analysis.max_length_of_integer_part()))
-        self.assertEqual(5, analysis.max_length_of_integer_part())
-        self.assertEqual(
-            [" 12345.12340", " 1.234512340e4", "-12345.1"], analysis.values_with_max_length_of_integer_part()
-        )
-        self.assertEqual(np.int64, type(analysis.max_length_of_decimal_part()))
-        self.assertEqual(5, analysis.max_length_of_decimal_part())
-        self.assertEqual([" 12345.12340", " 1.234512340e4"], analysis.values_with_max_length_of_decimal_part())
+    def test_string_column(self):
+        column_name = "value"
+        result = get_df_from_csv_test_file("all_possible_string_values.csv")[column_name]
+        expected_result = pd.Series(data=[" a", "b ", np.nan, " c ", " a b  ", " "], name=column_name)
+        pd.testing.assert_series_equal(expected_result, result)
 
 
 def get_df_from_csv_test_file(file_name: str) -> Df:
