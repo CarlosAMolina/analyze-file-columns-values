@@ -4,11 +4,19 @@ from src import value_analyzer
 
 
 def show_file_analysis(file_path_name: str):
+    print(f"Analyzing file {file_path_name}")
     file_df = extractors.get_df_from_csv(file_path_name)
+    column_names = file_df.columns.tolist()
     for column_name in file_df:
-        column = file_df[column_name]
         print()
-        print(f"Analyzed column name: {column.name}")
+        print(
+            "Analyzing column {} of {}. Column name: {}".format(
+                column_names.index(column_name) + 1,
+                len(column_names),
+                column_name,
+            )
+        )
+        column = file_df[column_name]
         column_type = type_analyzer.get_column_type(column)
         print(f"Column type: {column_type.value}")
         if column_type == type_analyzer.Type.DECIMAL:
