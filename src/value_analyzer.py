@@ -10,16 +10,20 @@ def show_decimal_column_analysis(column: Series):
     print("Are there null values?", analysis.has_null_values())
     print("Maximum results:")
     print("  Maximum value:", analysis.max_value())
+    values_with_max_length_of_integer_part = analysis.values_with_max_length_of_integer_part()
     print(
-        "  Integer part. Maximum number of digits: {}. Values: {}".format(
+        "  Integer part. Maximum number of digits: {}. Values ({}): {}".format(
             analysis.max_length_of_integer_part(),
-            analysis.values_with_max_length_of_integer_part(),
+            len(values_with_max_length_of_integer_part),
+            _get_values_applying_limitacion(values_with_max_length_of_integer_part),
         )
     )
+    values_with_max_length_of_decimal_part = analysis.values_with_max_length_of_decimal_part()
     print(
-        "  Decimal part. Maximum number of digits: {}. Values: {}".format(
+        "  Decimal part. Maximum number of digits: {}. Values ({}): {}".format(
             analysis.max_length_of_decimal_part(),
-            analysis.values_with_max_length_of_decimal_part(),
+            len(values_with_max_length_of_decimal_part),
+            _get_values_applying_limitacion(values_with_max_length_of_decimal_part),
         )
     )
     print("Minimum value:", analysis.min_value())
@@ -49,31 +53,49 @@ def show_string_column_analysis(column: Series):
     print("  If values are stripped:", analysis.has_empty_values_if_stripped())
     print("  If values are not stripped:", analysis.has_empty_values_if_no_stripped())
     print("Values with maximum length:")
+    max_values_if_stripped = analysis.max_values_if_stripped()
     print(
-        "  If values are stripped. Number of characters: {}. Values: {}".format(
+        "  If values are stripped. Number of characters: {}. Values ({}): {}".format(
             analysis.max_length_if_stripped(),
-            analysis.max_values_if_stripped(),
+            len(max_values_if_stripped),
+            _get_values_applying_limitacion(max_values_if_stripped),
         )
     )
+    max_values_if_no_stripped = analysis.max_values_if_no_stripped()
     print(
-        "  If values are not stripped. Number of characters: {}. Values: {}".format(
+        "  If values are not stripped. Number of characters: {}. Values ({}): {}".format(
             analysis.max_length_if_no_stripped(),
-            analysis.max_values_if_no_stripped(),
+            len(max_values_if_no_stripped),
+            _get_values_applying_limitacion(max_values_if_no_stripped),
         )
     )
     print("Values with minimum length:")
+    min_values_if_stripped = analysis.min_values_if_stripped()
     print(
-        "  If values are stripped. Number of characters: {}. Values: {}".format(
+        "  If values are stripped. Number of characters: {}. Values ({}): {}".format(
             analysis.min_length_if_stripped(),
-            analysis.min_values_if_stripped(),
+            len(min_values_if_stripped),
+            _get_values_applying_limitacion(min_values_if_stripped),
         )
     )
+    min_values_if_no_stripped = analysis.min_values_if_no_stripped()
     print(
-        "  If values are not stripped. Number of characters: {}. Values: {}".format(
+        "  If values are not stripped. Number of characters: {}. Values ({}): {}".format(
             analysis.min_length_if_no_stripped(),
-            analysis.min_values_if_no_stripped(),
+            len(min_values_if_no_stripped),
+            _get_values_applying_limitacion(min_values_if_no_stripped),
         )
     )
+
+
+def _get_values_applying_limitacion(values: list) -> str | list:
+    MAX_VALUES_TO_SHOW = 4
+    if len(values) > MAX_VALUES_TO_SHOW:
+        values_to_show = values[:MAX_VALUES_TO_SHOW]
+        values_to_show_str = str(values_to_show).replace("]", ", ...")
+        return f"{values_to_show_str} (more values are omitted)"
+    else:
+        return values
 
 
 class _StringColumnAnalyzer:
