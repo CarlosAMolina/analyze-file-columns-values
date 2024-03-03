@@ -65,7 +65,9 @@ def _has_column_any_character(column: "pd.Series[str]") -> bool:
 
 
 def _has_row_any_character(column: "pd.Series[str]") -> "pd.Series[bool]":
-    return column.str.contains(r"[a-z]", flags=re.IGNORECASE, regex=True)
+    result = column.str.contains(r"[a-z]", flags=re.IGNORECASE, regex=True)
+    result = result.fillna(False)
+    return result
 
 
 def _are_all_characters_e(column: "pd.Series[str]") -> bool:

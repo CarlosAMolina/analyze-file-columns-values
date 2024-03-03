@@ -110,4 +110,11 @@ class TestDecimalTypeAnalyzer(unittest.TestCase):
         column = pd.Series(data=["1e-1", "2"], name="values")
         self.assertTrue(ta._DecimalTypeAnalyzer(column).is_column_of_this_type())
 
-# TODO test _are_all_characters_e with null value because it raises exception
+
+class TestFunction_has_row_any_character(unittest.TestCase):
+    def test_if_null_value(self):
+        column = pd.Series(data=["1", "1e1", np.nan], name="values")
+        expected_result = pd.Series(data=[False, True, False], name="values")
+        result = ta._has_row_any_character(column)
+        pd.testing.assert_series_equal(expected_result, result)
+
