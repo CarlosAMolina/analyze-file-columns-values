@@ -11,7 +11,7 @@ from src import type_analyzer
 class TestFunction_show_file_analysis(unittest.TestCase):
     def test_does_not_raise_exception(self):
         file_path_name = get_test_file_path_name("file.csv")
-        manager.show_file_analisis(file_path_name)
+        manager.show_file_analysis(file_path_name)
 
 
 class TestFunction_get_column_names_and_types_from_df(unittest.TestCase):

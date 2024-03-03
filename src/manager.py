@@ -5,7 +5,7 @@ from src import extractors
 from src import type_analyzer
 
 
-def show_file_analisis(file_path_name: str):
+def show_file_analysis(file_path_name: str):
     file_df = extractors.get_df_from_csv(file_path_name)
     for column_name, column_type in _get_column_names_and_types_from_df(file_df):
         print(column_name, column_type)  # TODO rm
