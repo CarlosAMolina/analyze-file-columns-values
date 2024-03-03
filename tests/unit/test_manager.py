@@ -2,8 +2,6 @@ import pathlib
 import unittest
 
 from pandas import DataFrame as Df
-import pandas as pd
-import numpy as np
 
 from src import extractors
 from src import manager
@@ -18,7 +16,7 @@ class TestFunction_get_column_names_and_types_from_df(unittest.TestCase):
             "Column string": type_analyzer.Type.STRING,
             "Column string all lines with value": type_analyzer.Type.STRING,
             "Column integer": type_analyzer.Type.INTEGER,
-            "Column ecimal": type_analyzer.Type.DECIMAL,
+            "Column decimal": type_analyzer.Type.DECIMAL,
         }
         self.assertEqual(result, expected_result)
 
