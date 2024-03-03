@@ -18,7 +18,6 @@ In the main path of the project:
 make run
 ```
 
-
 ## Tests
 
 First, activate the virtual environment with the requirements installed.
