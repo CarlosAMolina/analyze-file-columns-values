@@ -109,3 +109,5 @@ class TestDecimalTypeAnalyzer(unittest.TestCase):
     def test_is_column_of_this_type_is_true_if_negative_e(self):
         column = pd.Series(data=["1e-1", "2"], name="values")
         self.assertTrue(ta._DecimalTypeAnalyzer(column).is_column_of_this_type())
+
+# TODO test _are_all_characters_e with null value because it raises exception
