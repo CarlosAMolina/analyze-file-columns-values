@@ -6,8 +6,6 @@ from pandas import Series
 
 
 def show_decimal_column_analysis(column: Series):
-    print()
-    print(f"Analyzed decimal column: {column.name}")
     analysis = DecimalColumnAnalyzer(column)
     print("Are there null values?", analysis.has_null_values())
     print("Maximum results:")
@@ -28,8 +26,6 @@ def show_decimal_column_analysis(column: Series):
 
 
 def show_integer_column_analysis(column: Series):
-    print()
-    print(f"Analyzed integer column: {column.name}")
     analysis = IntegerColumnAnalyzer(column)
     print("Are there null values?", analysis.has_null_values())
     print(
@@ -47,8 +43,6 @@ def show_integer_column_analysis(column: Series):
 
 
 def show_string_column_analysis(column: Series):
-    print()
-    print(f"Analyzed string column: {column.name}")
     analysis = StringColumnAnalyzer(column)
     print("Are there null values?", analysis.has_null_values())
     print("Are there empty values?")
