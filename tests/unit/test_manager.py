@@ -8,6 +8,12 @@ from src import manager
 from src import type_analyzer
 
 
+class TestFunction_show_file_analysis(unittest.TestCase):
+    def test_does_not_raise_exception(self):
+        file_path_name = get_test_file_path_name("file.csv")
+        manager.show_file_analisis(file_path_name)
+
+
 class TestFunction_get_column_names_and_types_from_df(unittest.TestCase):
     def test_expected_result_is_returned(self):
         df = get_df_from_csv_test_file("file.csv")
@@ -22,7 +28,11 @@ class TestFunction_get_column_names_and_types_from_df(unittest.TestCase):
 
 
 def get_df_from_csv_test_file(file_name: str) -> Df:
+    csv_file_path_name = get_test_file_path_name(file_name)
+    return extractors.get_df_from_csv(csv_file_path_name)
+
+
+def get_test_file_path_name(file_name: str) -> str:
     script_dir = pathlib.Path(__file__).parent.absolute()
     tests_dir = script_dir.parent
-    csv_file_path_name = str(pathlib.PurePath(tests_dir, "files", file_name))
-    return extractors.get_df_from_csv(csv_file_path_name)
+    return str(pathlib.PurePath(tests_dir, "files", file_name))
