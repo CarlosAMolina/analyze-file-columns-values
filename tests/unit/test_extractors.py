@@ -17,6 +17,11 @@ class TestFileIsReadAsExpected(unittest.TestCase):
         )
         pd.testing.assert_series_equal(expected_result, result)
 
+    def test_decimal_column_null_value_has_expected_type(self):
+        column_name = "value"
+        result = get_df_from_csv_test_file("all_possible_decimal_values.csv")[column_name]
+        self.assertTrue(np.nan == result.loc[4])
+
     def test_integer_column(self):
         column_name = "value"
         result = get_df_from_csv_test_file("all_possible_integer_values.csv")[column_name]
