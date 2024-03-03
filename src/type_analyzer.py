@@ -83,8 +83,6 @@ def _has_numeric_column_of_e_numbers_only_int_numbers(column: "pd.Series[int|flo
 
 
 def _get_column_as_numeric(column: pd.Series) -> tp.Optional[pd.Series]:
-    # TODO. Conflict with the logic when analyzing the column values because
-    # withe spaces are not tripped when reading the csv file
     column_stripped = column.str.strip()
     try:
         return pd.to_numeric(column_stripped, errors="raise")
