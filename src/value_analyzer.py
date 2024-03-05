@@ -135,6 +135,16 @@ def _get_string_analysis(column: Series) -> _StringColumnAnalysis:
     )
 
 
+def get_string_sql_definition(string_analysis: _StringColumnAnalysis) -> str:
+    return "varchar({}) {}".format(
+        string_analysis.no_stripped.max_length, _get_null_sql_definition(string_analysis.has_null_values)
+    )
+
+
+def _get_null_sql_definition(has_null_values: bool) -> str:
+    return "NULL" if has_null_values else "NOT NULL"
+
+
 class _StringColumnAnalyzer:
     def __init__(self, column: Series):
         self._column = column
