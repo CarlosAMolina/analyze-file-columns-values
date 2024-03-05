@@ -98,8 +98,18 @@ def _get_values_applying_limitacion(values: list) -> str | list:
         return values
 
 
+class _BaseStringColumnAnalysis(tp.NamedTuple):
+    has_empty_values: bool
+    max_length: int
+    min_length: int
+    max_values: tp.List[str]
+    min_values: tp.List[str]
+
+
 class _StringColumnAnalysis(tp.NamedTuple):
     has_null_values: bool
+    stripped: _BaseStringColumnAnalysis
+    no_stripped: _BaseStringColumnAnalysis
     has_empty_values_if_stripped: bool
     has_empty_values_if_no_stripped: bool
     max_length_if_stripped: int
@@ -114,8 +124,24 @@ class _StringColumnAnalysis(tp.NamedTuple):
 
 def _get_string_analysis(column: Series) -> _StringColumnAnalysis:
     analysis = _StringColumnAnalyzer(column)
+    stripped_analysis = _BaseStringColumnAnalysis(
+        analysis.has_empty_values_if_stripped(),
+        analysis.max_length_if_stripped(),
+        analysis.min_length_if_stripped(),
+        analysis.max_values_if_stripped(),
+        analysis.min_values_if_stripped(),
+    )
+    no_stripped_analysis = _BaseStringColumnAnalysis(
+        analysis.has_empty_values_if_no_stripped(),
+        analysis.max_length_if_no_stripped(),
+        analysis.min_length_if_no_stripped(),
+        analysis.max_values_if_no_stripped(),
+        analysis.min_values_if_no_stripped(),
+    )
     return _StringColumnAnalysis(
         analysis.has_null_values(),
+        stripped_analysis,
+        no_stripped_analysis,
         analysis.has_empty_values_if_stripped(),
         analysis.has_empty_values_if_no_stripped(),
         analysis.max_length_if_stripped(),
