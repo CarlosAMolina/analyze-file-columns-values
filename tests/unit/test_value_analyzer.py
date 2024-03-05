@@ -6,6 +6,20 @@ import numpy as np
 from src import value_analyzer
 
 
+class TestFunction_get_decimal_sql_definition(unittest.TestCase):
+    def test_expected_result_if_not_null(self):
+        analysis = value_analyzer._DecimalColumnAnalysis(
+            has_null_values=False,
+            max_value=12.123,
+            min_value=1,
+            max_length_of_integer_part=2,
+            max_length_of_decimal_part=3,
+            values_with_max_length_of_integer_part=["12,123"],
+            values_with_max_length_of_decimal_part=["12,123"],
+        )
+        self.assertEqual("decimal(5,3) NOT NULL", value_analyzer.get_decimal_sql_definition(analysis))
+
+
 class TestFunction_get_string_sql_definition(unittest.TestCase):
     def test_expected_result_if_not_null(self):
         stripped_analysis = value_analyzer._StringBaseColumnAnalysis(
