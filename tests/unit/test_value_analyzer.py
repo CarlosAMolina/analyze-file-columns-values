@@ -7,7 +7,7 @@ from src import value_analyzer
 
 
 class TestFunction_get_string_sql_definition(unittest.TestCase):
-    def test_expected_result(self):
+    def test_expected_result_if_not_null(self):
         stripped_analysis = value_analyzer._StringBaseColumnAnalysis(
             has_empty_values=False,
             max_length=1,
@@ -28,6 +28,28 @@ class TestFunction_get_string_sql_definition(unittest.TestCase):
             no_stripped=no_stripped_analysis,
         )
         self.assertEqual("varchar(2) NOT NULL", value_analyzer.get_string_sql_definition(analysis))
+
+    def test_expected_result_if_null(self):
+        stripped_analysis = value_analyzer._StringBaseColumnAnalysis(
+            has_empty_values=False,
+            max_length=1,
+            min_length=1,
+            max_values=["a"],
+            min_values=["a"],
+        )
+        no_stripped_analysis = value_analyzer._StringBaseColumnAnalysis(
+            has_empty_values=False,
+            max_length=2,
+            min_length=2,
+            max_values=["a "],
+            min_values=["a "],
+        )
+        analysis = value_analyzer._StringColumnAnalysis(
+            has_null_values=True,
+            stripped=stripped_analysis,
+            no_stripped=no_stripped_analysis,
+        )
+        self.assertEqual("varchar(2) NULL", value_analyzer.get_string_sql_definition(analysis))
 
 
 class TestFunction_get_integer_sql_definition(unittest.TestCase):
