@@ -4,5 +4,5 @@ run:
 test:
 	python -m unittest discover -s tests
 test-filter:
-	python -m unittest discover -s tests -k TestFunction_get_string_sql_definition
+	python -m unittest discover -s tests -k TestFunction_get_integer_sql_definition
 

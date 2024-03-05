@@ -135,10 +135,8 @@ def _get_string_analysis(column: Series) -> _StringColumnAnalysis:
     )
 
 
-def get_string_sql_definition(string_analysis: _StringColumnAnalysis) -> str:
-    return "varchar({}) {}".format(
-        string_analysis.no_stripped.max_length, _get_null_sql_definition(string_analysis.has_null_values)
-    )
+def get_string_sql_definition(analysis: _StringColumnAnalysis) -> str:
+    return "varchar({}) {}".format(analysis.no_stripped.max_length, _get_null_sql_definition(analysis.has_null_values))
 
 
 def _get_null_sql_definition(has_null_values: bool) -> str:
@@ -241,6 +239,19 @@ def _get_integer_analysis(column: Series) -> _IntegerColumnAnalysis:
         analysis.max_value(),
         analysis.min_value(),
     )
+
+
+def get_integer_sql_definition(analysis: _IntegerColumnAnalysis) -> str:
+    # https://dev.mysql.com/doc/refman/8.0/en/integer-types.html
+    mysql_definition_max_value = {
+        "integer": 2147483647,
+    }
+    null_definition = _get_null_sql_definition(analysis.has_null_values)
+    # TODO check min value too to recommend unsigned
+    definition = "bigint"
+    if analysis.max_length < len(str(mysql_definition_max_value["integer"])):
+        definition = "integer"
+    return "{} {}".format(definition, null_definition)
 
 
 class _IntegerColumnAnalyzer:

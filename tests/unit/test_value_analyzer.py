@@ -30,6 +30,48 @@ class TestFunction_get_string_sql_definition(unittest.TestCase):
         self.assertEqual("varchar(2) NOT NULL", value_analyzer.get_string_sql_definition(analysis))
 
 
+class TestFunction_get_integer_sql_definition(unittest.TestCase):
+    def test_expected_result_if_null_values(self):
+        analysis = value_analyzer._IntegerColumnAnalysis(
+            has_null_values=True,
+            max_length=2,
+            min_length=1,
+            max_value=11,
+            min_value=1,
+        )
+        self.assertEqual("integer NULL", value_analyzer.get_integer_sql_definition(analysis))
+
+    def test_expected_result_if_not_null_values(self):
+        analysis = value_analyzer._IntegerColumnAnalysis(
+            has_null_values=False,
+            max_length=2,
+            min_length=1,
+            max_value=11,
+            min_value=1,
+        )
+        self.assertEqual("integer NOT NULL", value_analyzer.get_integer_sql_definition(analysis))
+
+    def test_expected_result_if_integer(self):
+        analysis = value_analyzer._IntegerColumnAnalysis(
+            has_null_values=True,
+            max_length=2,
+            min_length=1,
+            max_value=11,
+            min_value=1,
+        )
+        self.assertEqual("integer NULL", value_analyzer.get_integer_sql_definition(analysis))
+
+    def test_expected_result_if_int_with_maximum_length(self):
+        analysis = value_analyzer._IntegerColumnAnalysis(
+            has_null_values=True,
+            max_length=10,
+            min_length=1,
+            max_value=2_147_483_647,
+            min_value=1,
+        )
+        self.assertEqual("bigint NULL", value_analyzer.get_integer_sql_definition(analysis))
+
+
 class TestShowAnalysis(unittest.TestCase):
     def test_show_decimal_column_analysis(self):
         column = pd.Series(
