@@ -50,30 +50,30 @@ def show_string_column_analysis(column: Series):
     analysis = _get_string_analysis(column)
     print("Are there null values?", analysis.has_null_values)
     print("Are there empty values?")
-    print("  If values are stripped:", analysis.has_empty_values_if_stripped)
-    print("  If values are not stripped:", analysis.has_empty_values_if_no_stripped)
+    print("  If values are stripped:", analysis.stripped.has_empty_values)
+    print("  If values are not stripped:", analysis.no_stripped.has_empty_values)
     print("Values with maximum length:")
-    max_values_if_stripped = analysis.max_values_if_stripped
+    max_values_if_stripped = analysis.stripped.max_values
     print(
         "  If values are stripped. Number of characters: {}. Values ({}): {}".format(
-            analysis.max_length_if_stripped,
+            analysis.stripped.max_length,
             len(max_values_if_stripped),
             _get_values_applying_limitacion(max_values_if_stripped),
         )
     )
-    max_values_if_no_stripped = analysis.max_values_if_no_stripped
+    max_values_if_no_stripped = analysis.no_stripped.max_values
     print(
         "  If values are not stripped. Number of characters: {}. Values ({}): {}".format(
-            analysis.max_length_if_no_stripped,
+            analysis.no_stripped.max_length,
             len(max_values_if_no_stripped),
             _get_values_applying_limitacion(max_values_if_no_stripped),
         )
     )
     print("Values with minimum length:")
-    min_values_if_stripped = analysis.min_values_if_stripped
+    min_values_if_stripped = analysis.stripped.min_values
     print(
         "  If values are stripped. Number of characters: {}. Values ({}): {}".format(
-            analysis.min_length_if_stripped,
+            analysis.stripped.min_length,
             len(min_values_if_stripped),
             _get_values_applying_limitacion(min_values_if_stripped),
         )
@@ -81,7 +81,7 @@ def show_string_column_analysis(column: Series):
     min_values_if_no_stripped = analysis.min_values_if_no_stripped
     print(
         "  If values are not stripped. Number of characters: {}. Values ({}): {}".format(
-            analysis.min_length_if_no_stripped,
+            analysis.no_stripped.min_length,
             len(min_values_if_no_stripped),
             _get_values_applying_limitacion(min_values_if_no_stripped),
         )
