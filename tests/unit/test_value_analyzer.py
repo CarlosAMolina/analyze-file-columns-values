@@ -7,7 +7,7 @@ from src import value_analyzer
 
 
 class TestFunction_get_decimal_sql_definition(unittest.TestCase):
-    def test_expected_result_if_not_null(self):
+    def test_expected_result(self):
         analysis = value_analyzer._DecimalColumnAnalysis(
             has_null_values=False,
             max_value=12.123,
