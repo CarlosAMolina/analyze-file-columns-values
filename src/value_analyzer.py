@@ -30,18 +30,18 @@ def show_decimal_column_analysis(column: Series):
 
 
 def show_integer_column_analysis(column: Series):
-    analysis = _IntegerColumnAnalyzer(column)
-    print("Are there null values?", analysis.has_null_values())
+    analysis = _get_integer_analysis(column)
+    print("Are there null values?", analysis.has_null_values)
     print(
         "Max value. Number of digits: {}. Value: {}".format(
-            analysis.max_length(),
-            analysis.max_value(),
+            analysis.max_length,
+            analysis.max_value,
         )
     )
     print(
         "Min value. Number of digits: {}. Value: {}".format(
-            analysis.min_length(),
-            analysis.min_value(),
+            analysis.min_length,
+            analysis.min_value,
         )
     )
 
@@ -222,6 +222,25 @@ def _get_unique_values_of_column(
     df: Df,
 ) -> tp.List[tp.Any]:
     return df.loc[condition][column_name].drop_duplicates().to_list()
+
+
+class _IntegerColumnAnalysis(tp.NamedTuple):
+    has_null_values: bool
+    max_length: int
+    min_length: int
+    max_value: int
+    min_value: int
+
+
+def _get_integer_analysis(column: Series) -> _IntegerColumnAnalysis:
+    analysis = _IntegerColumnAnalyzer(column)
+    return _IntegerColumnAnalysis(
+        analysis.has_null_values(),
+        analysis.max_length(),
+        analysis.min_length(),
+        analysis.max_value(),
+        analysis.min_value(),
+    )
 
 
 class _IntegerColumnAnalyzer:
