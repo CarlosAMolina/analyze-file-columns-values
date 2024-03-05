@@ -6,6 +6,14 @@ import numpy as np
 from src import value_analyzer
 
 
+class TestFunction_get_null_sql_definition(unittest.TestCase):
+    def test_get_null_sql_definition_if_null(self):
+        self.assertEqual("NULL", value_analyzer._get_null_sql_definition(has_null_values=True))
+
+    def test_get_null_sql_definition_if_not_null(self):
+        self.assertEqual("NOT NULL", value_analyzer._get_null_sql_definition(has_null_values=False))
+
+
 class TestFunction_get_decimal_sql_definition(unittest.TestCase):
     def test_expected_result(self):
         analysis = value_analyzer._DecimalColumnAnalysis(
