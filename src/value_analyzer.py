@@ -93,8 +93,10 @@ def get_string_analysis(column: Series) -> _StringColumnAnalysis:
     )
 
 
-def get_string_sql_definition(analysis: _StringColumnAnalysis) -> str:
-    return "varchar({}) {}".format(analysis.no_stripped.max_length, _get_null_sql_definition(analysis.has_null_values))
+def get_string_sql_definition(analysis: _StringColumnAnalysis, column_name: str) -> str:
+    return "{} varchar({}) {},".format(
+        column_name, analysis.no_stripped.max_length, _get_null_sql_definition(analysis.has_null_values)
+    )
 
 
 def _get_null_sql_definition(has_null_values: bool) -> str:
@@ -215,7 +217,7 @@ def get_integer_analysis(column: Series) -> _IntegerColumnAnalysis:
     )
 
 
-def get_integer_sql_definition(analysis: _IntegerColumnAnalysis) -> str:
+def get_integer_sql_definition(analysis: _IntegerColumnAnalysis, column_name: str) -> str:
     # https://dev.mysql.com/doc/refman/8.0/en/integer-types.html
     mysql_definition_max_value = {
         "integer": 2147483647,
@@ -225,7 +227,7 @@ def get_integer_sql_definition(analysis: _IntegerColumnAnalysis) -> str:
     definition = "bigint"
     if analysis.max_length < len(str(mysql_definition_max_value["integer"])):
         definition = "integer"
-    return "{} {}".format(definition, null_definition)
+    return "{} {} {},".format(column_name, definition, null_definition)
 
 
 class _IntegerColumnAnalyzer:
@@ -315,9 +317,10 @@ def get_decimal_analysis(column: Series) -> _DecimalColumnAnalysis:
     )
 
 
-def get_decimal_sql_definition(analysis: _DecimalColumnAnalysis) -> str:
+def get_decimal_sql_definition(analysis: _DecimalColumnAnalysis, column_name: str) -> str:
     null_definition = _get_null_sql_definition(analysis.has_null_values)
-    return "decimal({},{}) {}".format(
+    return "{} decimal({},{}) {},".format(
+        column_name,
         analysis.max_length_of_integer_part + analysis.max_length_of_decimal_part,
         analysis.max_length_of_decimal_part,
         null_definition,

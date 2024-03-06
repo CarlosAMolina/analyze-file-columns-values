@@ -25,7 +25,7 @@ class TestFunction_get_decimal_sql_definition(unittest.TestCase):
             values_with_max_length_of_integer_part=["12,123"],
             values_with_max_length_of_decimal_part=["12,123"],
         )
-        self.assertEqual("decimal(5,3) NOT NULL", value_analyzer.get_decimal_sql_definition(analysis))
+        self.assertEqual("foo decimal(5,3) NOT NULL,", value_analyzer.get_decimal_sql_definition(analysis, "foo"))
 
 
 class TestFunction_get_string_sql_definition(unittest.TestCase):
@@ -49,7 +49,7 @@ class TestFunction_get_string_sql_definition(unittest.TestCase):
             stripped=stripped_analysis,
             no_stripped=no_stripped_analysis,
         )
-        self.assertEqual("varchar(2) NOT NULL", value_analyzer.get_string_sql_definition(analysis))
+        self.assertEqual("foo varchar(2) NOT NULL,", value_analyzer.get_string_sql_definition(analysis, "foo"))
 
 
 class TestFunction_get_integer_sql_definition(unittest.TestCase):
@@ -61,7 +61,7 @@ class TestFunction_get_integer_sql_definition(unittest.TestCase):
             max_value=11,
             min_value=1,
         )
-        self.assertEqual("integer NULL", value_analyzer.get_integer_sql_definition(analysis))
+        self.assertEqual("foo integer NULL,", value_analyzer.get_integer_sql_definition(analysis, "foo"))
 
     def test_expected_result_if_integer(self):
         analysis = value_analyzer._IntegerColumnAnalysis(
@@ -71,7 +71,7 @@ class TestFunction_get_integer_sql_definition(unittest.TestCase):
             max_value=11,
             min_value=1,
         )
-        self.assertEqual("integer NULL", value_analyzer.get_integer_sql_definition(analysis))
+        self.assertEqual("foo integer NULL,", value_analyzer.get_integer_sql_definition(analysis, "foo"))
 
     def test_expected_result_if_bigint_for_int_with_maximum_length(self):
         analysis = value_analyzer._IntegerColumnAnalysis(
@@ -81,7 +81,7 @@ class TestFunction_get_integer_sql_definition(unittest.TestCase):
             max_value=2_147_483_647,
             min_value=1,
         )
-        self.assertEqual("bigint NULL", value_analyzer.get_integer_sql_definition(analysis))
+        self.assertEqual("foo bigint NULL,", value_analyzer.get_integer_sql_definition(analysis, "foo"))
 
 
 class TestShowAnalysis(unittest.TestCase):

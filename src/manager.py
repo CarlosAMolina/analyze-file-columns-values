@@ -27,15 +27,15 @@ def show_file_analysis(file_path_name: str):
         if column_type == type_analyzer.Type.DECIMAL:
             analysis = value_analyzer.get_decimal_analysis(column)
             value_analyzer.show_decimal_column_analysis(analysis)
-            sql_definition.append(value_analyzer.get_decimal_sql_definition(analysis))
+            sql_definition.append(value_analyzer.get_decimal_sql_definition(analysis, column_name))
         elif column_type == type_analyzer.Type.INTEGER:
             analysis = value_analyzer.get_integer_analysis(column)
             value_analyzer.show_integer_column_analysis(analysis)
-            sql_definition.append(value_analyzer.get_integer_sql_definition(analysis))
+            sql_definition.append(value_analyzer.get_integer_sql_definition(analysis, column_name))
         elif column_type == type_analyzer.Type.STRING:
             analysis = value_analyzer.get_string_analysis(column)
             value_analyzer.show_string_column_analysis(analysis)
-            sql_definition.append(value_analyzer.get_string_sql_definition(analysis))
+            sql_definition.append(value_analyzer.get_string_sql_definition(analysis, column_name))
         else:
             raise ValueError(column_type)
         print("\nSQL definition")
