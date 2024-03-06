@@ -190,7 +190,7 @@ class _IntegerColumnAnalysis(tp.NamedTuple):
 
 
 def show_integer_column_analysis(column: Series, analysis: _IntegerColumnAnalysis):
-    analysis = _get_integer_analysis(column)
+    analysis = get_integer_analysis(column)
     print("Are there null values?", analysis.has_null_values)
     print(
         "Max value. Number of digits: {}. Value: {}".format(
@@ -206,7 +206,7 @@ def show_integer_column_analysis(column: Series, analysis: _IntegerColumnAnalysi
     )
 
 
-def _get_integer_analysis(column: Series) -> _IntegerColumnAnalysis:
+def get_integer_analysis(column: Series) -> _IntegerColumnAnalysis:
     analysis = _IntegerColumnAnalyzer(column)
     return _IntegerColumnAnalysis(
         analysis.has_null_values(),
