@@ -99,7 +99,8 @@ class TestShowAnalysis(unittest.TestCase):
 
     def test_show_string_column_analysis(self):
         column = pd.Series(data=[" john doe", "johnny ", np.nan, "doe", " "], name="names")
-        value_analyzer.show_string_column_analysis(column)
+        analysis = value_analyzer.get_string_analysis(column)
+        value_analyzer.show_string_column_analysis(column, analysis)
 
 
 class TestStringColumnAnalyzer(unittest.TestCase):

@@ -5,8 +5,32 @@ from pandas import DataFrame as Df
 from pandas import Series
 
 
-def show_string_column_analysis(column: Series):
-    analysis = _get_string_analysis(column)
+def _get_values_applying_limitacion(values: list) -> tp.Union[str, list]:
+    MAX_VALUES_TO_SHOW = 4
+    if len(values) > MAX_VALUES_TO_SHOW:
+        values_to_show = values[:MAX_VALUES_TO_SHOW]
+        values_to_show_str = str(values_to_show).replace("]", ", ...")
+        return f"{values_to_show_str} (more values are omitted)"
+    else:
+        return values
+
+
+class _StringBaseColumnAnalysis(tp.NamedTuple):
+    has_empty_values: bool
+    max_length: int
+    min_length: int
+    max_values: tp.List[str]
+    min_values: tp.List[str]
+
+
+class _StringColumnAnalysis(tp.NamedTuple):
+    has_null_values: bool
+    stripped: _StringBaseColumnAnalysis
+    no_stripped: _StringBaseColumnAnalysis
+
+
+def show_string_column_analysis(column: Series, analysis: _StringColumnAnalysis):
+    analysis = get_string_analysis(column)
     print("Are there null values?", analysis.has_null_values)
     print("Are there empty values?")
     print("  If values are stripped:", analysis.stripped.has_empty_values)
@@ -47,31 +71,7 @@ def show_string_column_analysis(column: Series):
     )
 
 
-def _get_values_applying_limitacion(values: list) -> tp.Union[str, list]:
-    MAX_VALUES_TO_SHOW = 4
-    if len(values) > MAX_VALUES_TO_SHOW:
-        values_to_show = values[:MAX_VALUES_TO_SHOW]
-        values_to_show_str = str(values_to_show).replace("]", ", ...")
-        return f"{values_to_show_str} (more values are omitted)"
-    else:
-        return values
-
-
-class _StringBaseColumnAnalysis(tp.NamedTuple):
-    has_empty_values: bool
-    max_length: int
-    min_length: int
-    max_values: tp.List[str]
-    min_values: tp.List[str]
-
-
-class _StringColumnAnalysis(tp.NamedTuple):
-    has_null_values: bool
-    stripped: _StringBaseColumnAnalysis
-    no_stripped: _StringBaseColumnAnalysis
-
-
-def _get_string_analysis(column: Series) -> _StringColumnAnalysis:
+def get_string_analysis(column: Series) -> _StringColumnAnalysis:
     analysis = _StringColumnAnalyzer(column)
     stripped_analysis = _StringBaseColumnAnalysis(
         analysis.has_empty_values_if_stripped(),

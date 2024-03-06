@@ -30,6 +30,7 @@ def show_file_analysis(file_path_name: str):
             analysis = value_analyzer.get_integer_analysis(column)
             value_analyzer.show_integer_column_analysis(column, analysis)
         elif column_type == type_analyzer.Type.STRING:
-            value_analyzer.show_string_column_analysis(column)
+            analysis = value_analyzer.get_string_analysis(column)
+            value_analyzer.show_string_column_analysis(column, analysis)
         else:
             raise ValueError(column_type)
