@@ -6,6 +6,84 @@ import numpy as np
 from src import value_analyzer
 
 
+class TestFunction_get_null_sql_definition(unittest.TestCase):
+    def test_get_null_sql_definition_if_null(self):
+        self.assertEqual("NULL", value_analyzer._get_null_sql_definition(has_null_values=True))
+
+    def test_get_null_sql_definition_if_not_null(self):
+        self.assertEqual("NOT NULL", value_analyzer._get_null_sql_definition(has_null_values=False))
+
+
+class TestFunction_get_decimal_sql_definition(unittest.TestCase):
+    def test_expected_result(self):
+        analysis = value_analyzer._DecimalColumnAnalysis(
+            has_null_values=False,
+            max_value=12.123,
+            min_value=1,
+            max_length_of_integer_part=2,
+            max_length_of_decimal_part=3,
+            values_with_max_length_of_integer_part=["12,123"],
+            values_with_max_length_of_decimal_part=["12,123"],
+        )
+        self.assertEqual("decimal(5,3) NOT NULL", value_analyzer.get_decimal_sql_definition(analysis))
+
+
+class TestFunction_get_string_sql_definition(unittest.TestCase):
+    def test_expected_result(self):
+        stripped_analysis = value_analyzer._StringBaseColumnAnalysis(
+            has_empty_values=False,
+            max_length=1,
+            min_length=1,
+            max_values=["a"],
+            min_values=["a"],
+        )
+        no_stripped_analysis = value_analyzer._StringBaseColumnAnalysis(
+            has_empty_values=False,
+            max_length=2,
+            min_length=2,
+            max_values=["a "],
+            min_values=["a "],
+        )
+        analysis = value_analyzer._StringColumnAnalysis(
+            has_null_values=False,
+            stripped=stripped_analysis,
+            no_stripped=no_stripped_analysis,
+        )
+        self.assertEqual("varchar(2) NOT NULL", value_analyzer.get_string_sql_definition(analysis))
+
+
+class TestFunction_get_integer_sql_definition(unittest.TestCase):
+    def test_expected_result(self):
+        analysis = value_analyzer._IntegerColumnAnalysis(
+            has_null_values=True,
+            max_length=2,
+            min_length=1,
+            max_value=11,
+            min_value=1,
+        )
+        self.assertEqual("integer NULL", value_analyzer.get_integer_sql_definition(analysis))
+
+    def test_expected_result_if_integer(self):
+        analysis = value_analyzer._IntegerColumnAnalysis(
+            has_null_values=True,
+            max_length=2,
+            min_length=1,
+            max_value=11,
+            min_value=1,
+        )
+        self.assertEqual("integer NULL", value_analyzer.get_integer_sql_definition(analysis))
+
+    def test_expected_result_if_bigint_for_int_with_maximum_length(self):
+        analysis = value_analyzer._IntegerColumnAnalysis(
+            has_null_values=True,
+            max_length=10,
+            min_length=1,
+            max_value=2_147_483_647,
+            min_value=1,
+        )
+        self.assertEqual("bigint NULL", value_analyzer.get_integer_sql_definition(analysis))
+
+
 class TestShowAnalysis(unittest.TestCase):
     def test_show_decimal_column_analysis(self):
         column = pd.Series(
