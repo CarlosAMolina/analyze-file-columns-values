@@ -10,11 +10,12 @@ def show_file_analysis(file_path_name: str):
     file_df = extractors.get_df_from_csv(file_path_name)
     column_names = file_df.columns.tolist()
     for column_name in file_df:
+        index = column_names.index(column_name) + 1  # TODO change with enumerate()
         print()
         print(
             "[{}] Analyzing column {} of {}. Column name: {}".format(
                 datetime.datetime.now(),
-                column_names.index(column_name) + 1,
+                index,
                 len(column_names),
                 column_name,
             )

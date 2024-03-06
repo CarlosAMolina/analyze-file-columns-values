@@ -88,7 +88,7 @@ def show_string_column_analysis(column: Series):
     )
 
 
-def _get_values_applying_limitacion(values: list) -> str | list:
+def _get_values_applying_limitacion(values: list) -> tp.Union[str, list]:
     MAX_VALUES_TO_SHOW = 4
     if len(values) > MAX_VALUES_TO_SHOW:
         values_to_show = values[:MAX_VALUES_TO_SHOW]
