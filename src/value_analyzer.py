@@ -29,8 +29,7 @@ class _StringColumnAnalysis(tp.NamedTuple):
     no_stripped: _StringBaseColumnAnalysis
 
 
-def show_string_column_analysis(column: Series, analysis: _StringColumnAnalysis):
-    analysis = get_string_analysis(column)
+def show_string_column_analysis(analysis: _StringColumnAnalysis):
     print("Are there null values?", analysis.has_null_values)
     print("Are there empty values?")
     print("  If values are stripped:", analysis.stripped.has_empty_values)
@@ -189,8 +188,7 @@ class _IntegerColumnAnalysis(tp.NamedTuple):
     min_value: int
 
 
-def show_integer_column_analysis(column: Series, analysis: _IntegerColumnAnalysis):
-    analysis = get_integer_analysis(column)
+def show_integer_column_analysis(analysis: _IntegerColumnAnalysis):
     print("Are there null values?", analysis.has_null_values)
     print(
         "Max value. Number of digits: {}. Value: {}".format(
@@ -281,8 +279,7 @@ class _DecimalColumnAnalysis(tp.NamedTuple):
     values_with_max_length_of_decimal_part: tp.List[str]
 
 
-def show_decimal_column_analysis(column: Series, analysis: _DecimalColumnAnalysis):
-    analysis = get_decimal_analysis(column)
+def show_decimal_column_analysis(analysis: _DecimalColumnAnalysis):
     print("Are there null values?", analysis.has_null_values)
     print("Maximum results:")
     print("  Maximum value:", analysis.max_value)

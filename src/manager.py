@@ -25,12 +25,12 @@ def show_file_analysis(file_path_name: str):
         print(f"Column type: {column_type.value}")
         if column_type == type_analyzer.Type.DECIMAL:
             analysis = value_analyzer.get_decimal_analysis(column)
-            value_analyzer.show_decimal_column_analysis(column, analysis)
+            value_analyzer.show_decimal_column_analysis(analysis)
         elif column_type == type_analyzer.Type.INTEGER:
             analysis = value_analyzer.get_integer_analysis(column)
-            value_analyzer.show_integer_column_analysis(column, analysis)
+            value_analyzer.show_integer_column_analysis(analysis)
         elif column_type == type_analyzer.Type.STRING:
             analysis = value_analyzer.get_string_analysis(column)
-            value_analyzer.show_string_column_analysis(column, analysis)
+            value_analyzer.show_string_column_analysis(analysis)
         else:
             raise ValueError(column_type)

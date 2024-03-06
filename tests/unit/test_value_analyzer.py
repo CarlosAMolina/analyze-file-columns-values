@@ -90,17 +90,17 @@ class TestShowAnalysis(unittest.TestCase):
             data=["3.4", " 12345.12340", " 1.2345123410e4", "3", np.nan, "-12345.1"], name="random decimal numbers"
         )
         analysis = value_analyzer.get_decimal_analysis(column)
-        value_analyzer.show_decimal_column_analysis(column, analysis)
+        value_analyzer.show_decimal_column_analysis(analysis)
 
     def test_show_integer_column_analysis(self):
         column = pd.Series(data=["1234", " 2", np.nan, "-3"], name="random integer numbers")
         analysis = value_analyzer.get_integer_analysis(column)
-        value_analyzer.show_integer_column_analysis(column, analysis)
+        value_analyzer.show_integer_column_analysis(analysis)
 
     def test_show_string_column_analysis(self):
         column = pd.Series(data=[" john doe", "johnny ", np.nan, "doe", " "], name="names")
         analysis = value_analyzer.get_string_analysis(column)
-        value_analyzer.show_string_column_analysis(column, analysis)
+        value_analyzer.show_string_column_analysis(analysis)
 
 
 class TestStringColumnAnalyzer(unittest.TestCase):
