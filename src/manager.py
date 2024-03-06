@@ -9,8 +9,7 @@ def show_file_analysis(file_path_name: str):
     print("[{}] Analyzing file {}".format(datetime.datetime.now(), file_path_name))
     file_df = extractors.get_df_from_csv(file_path_name)
     column_names = file_df.columns.tolist()
-    for column_name in file_df:
-        index = column_names.index(column_name) + 1  # TODO change with enumerate()
+    for index, column_name in enumerate(file_df, 1):
         print()
         print(
             "[{}] Analyzing column {} of {}. Column name: {}".format(
