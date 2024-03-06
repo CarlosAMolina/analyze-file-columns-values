@@ -38,6 +38,10 @@ def show_file_analysis(file_path_name: str):
             sql_definition.append(value_analyzer.get_string_sql_definition(analysis, column_name))
         else:
             raise ValueError(column_type)
-        print("\nSQL definition")
-        sql_definition_str = "\n".join(sql_definition)
-        print(sql_definition_str)
+    _show_sql_definition(sql_definition)
+
+
+def _show_sql_definition(sql_definition: tp.List[str]):
+    print("\nSQL definition")
+    sql_definition_str = "\n".join(sql_definition)
+    print(sql_definition_str)
