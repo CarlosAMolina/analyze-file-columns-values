@@ -5,30 +5,6 @@ from pandas import DataFrame as Df
 from pandas import Series
 
 
-def show_decimal_column_analysis(column: Series):
-    analysis = _get_decimal_analysis(column)
-    print("Are there null values?", analysis.has_null_values)
-    print("Maximum results:")
-    print("  Maximum value:", analysis.max_value)
-    values_with_max_length_of_integer_part = analysis.values_with_max_length_of_integer_part
-    print(
-        "  Integer part. Maximum number of digits: {}. Values ({}): {}".format(
-            analysis.max_length_of_integer_part,
-            len(values_with_max_length_of_integer_part),
-            _get_values_applying_limitacion(values_with_max_length_of_integer_part),
-        )
-    )
-    values_with_max_length_of_decimal_part = analysis.values_with_max_length_of_decimal_part
-    print(
-        "  Decimal part. Maximum number of digits: {}. Values ({}): {}".format(
-            analysis.max_length_of_decimal_part,
-            len(values_with_max_length_of_decimal_part),
-            _get_values_applying_limitacion(values_with_max_length_of_decimal_part),
-        )
-    )
-    print("Minimum value:", analysis.min_value)
-
-
 def show_integer_column_analysis(column: Series):
     analysis = _get_integer_analysis(column)
     print("Are there null values?", analysis.has_null_values)
@@ -303,6 +279,30 @@ class _DecimalColumnAnalysis(tp.NamedTuple):
     max_length_of_decimal_part: int
     values_with_max_length_of_integer_part: tp.List[str]
     values_with_max_length_of_decimal_part: tp.List[str]
+
+
+def show_decimal_column_analysis(column: Series, analysis: _DecimalColumnAnalysis):
+    analysis = _get_decimal_analysis(column)
+    print("Are there null values?", analysis.has_null_values)
+    print("Maximum results:")
+    print("  Maximum value:", analysis.max_value)
+    values_with_max_length_of_integer_part = analysis.values_with_max_length_of_integer_part
+    print(
+        "  Integer part. Maximum number of digits: {}. Values ({}): {}".format(
+            analysis.max_length_of_integer_part,
+            len(values_with_max_length_of_integer_part),
+            _get_values_applying_limitacion(values_with_max_length_of_integer_part),
+        )
+    )
+    values_with_max_length_of_decimal_part = analysis.values_with_max_length_of_decimal_part
+    print(
+        "  Decimal part. Maximum number of digits: {}. Values ({}): {}".format(
+            analysis.max_length_of_decimal_part,
+            len(values_with_max_length_of_decimal_part),
+            _get_values_applying_limitacion(values_with_max_length_of_decimal_part),
+        )
+    )
+    print("Minimum value:", analysis.min_value)
 
 
 def _get_decimal_analysis(column: Series) -> _DecimalColumnAnalysis:
