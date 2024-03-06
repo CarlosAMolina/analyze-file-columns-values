@@ -272,7 +272,6 @@ class _IntegerColumnAnalyzer:
 
 
 def show_all_null_column_analysis():
-    print("Are there null values?", True)
     print("All values are null")
 
 
