@@ -5,23 +5,6 @@ from pandas import DataFrame as Df
 from pandas import Series
 
 
-def show_integer_column_analysis(column: Series):
-    analysis = _get_integer_analysis(column)
-    print("Are there null values?", analysis.has_null_values)
-    print(
-        "Max value. Number of digits: {}. Value: {}".format(
-            analysis.max_length,
-            analysis.max_value,
-        )
-    )
-    print(
-        "Min value. Number of digits: {}. Value: {}".format(
-            analysis.min_length,
-            analysis.min_value,
-        )
-    )
-
-
 def show_string_column_analysis(column: Series):
     analysis = _get_string_analysis(column)
     print("Are there null values?", analysis.has_null_values)
@@ -204,6 +187,23 @@ class _IntegerColumnAnalysis(tp.NamedTuple):
     min_length: int
     max_value: int
     min_value: int
+
+
+def show_integer_column_analysis(column: Series, analysis: _IntegerColumnAnalysis):
+    analysis = _get_integer_analysis(column)
+    print("Are there null values?", analysis.has_null_values)
+    print(
+        "Max value. Number of digits: {}. Value: {}".format(
+            analysis.max_length,
+            analysis.max_value,
+        )
+    )
+    print(
+        "Min value. Number of digits: {}. Value: {}".format(
+            analysis.min_length,
+            analysis.min_value,
+        )
+    )
 
 
 def _get_integer_analysis(column: Series) -> _IntegerColumnAnalysis:

@@ -94,7 +94,8 @@ class TestShowAnalysis(unittest.TestCase):
 
     def test_show_integer_column_analysis(self):
         column = pd.Series(data=["1234", " 2", np.nan, "-3"], name="random integer numbers")
-        value_analyzer.show_integer_column_analysis(column)
+        analysis = value_analyzer._get_integer_analysis(column)
+        value_analyzer.show_integer_column_analysis(column, analysis)
 
     def test_show_string_column_analysis(self):
         column = pd.Series(data=[" john doe", "johnny ", np.nan, "doe", " "], name="names")
