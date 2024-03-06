@@ -89,7 +89,7 @@ class TestShowAnalysis(unittest.TestCase):
         column = pd.Series(
             data=["3.4", " 12345.12340", " 1.2345123410e4", "3", np.nan, "-12345.1"], name="random decimal numbers"
         )
-        analysis = value_analyzer._get_decimal_analysis(column)
+        analysis = value_analyzer.get_decimal_analysis(column)
         value_analyzer.show_decimal_column_analysis(column, analysis)
 
     def test_show_integer_column_analysis(self):

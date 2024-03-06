@@ -282,7 +282,7 @@ class _DecimalColumnAnalysis(tp.NamedTuple):
 
 
 def show_decimal_column_analysis(column: Series, analysis: _DecimalColumnAnalysis):
-    analysis = _get_decimal_analysis(column)
+    analysis = get_decimal_analysis(column)
     print("Are there null values?", analysis.has_null_values)
     print("Maximum results:")
     print("  Maximum value:", analysis.max_value)
@@ -305,7 +305,7 @@ def show_decimal_column_analysis(column: Series, analysis: _DecimalColumnAnalysi
     print("Minimum value:", analysis.min_value)
 
 
-def _get_decimal_analysis(column: Series) -> _DecimalColumnAnalysis:
+def get_decimal_analysis(column: Series) -> _DecimalColumnAnalysis:
     analysis = _DecimalColumnAnalyzer(column)
     return _DecimalColumnAnalysis(
         analysis.has_null_values(),
