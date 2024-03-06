@@ -9,15 +9,26 @@ class Type(enum.Enum):
     INTEGER = "integer"
     DECIMAL = "decimal"
     STRING = "string"
+    ALL_NULL = "all nulls"
 
 
 def get_column_type(column: "pd.Series[str]") -> Type:
-    if _IntegerTypeAnalyzer(column).is_column_of_this_type():
+    if _AllNullTypeAnalyzer(column).is_column_of_this_type():
+        return Type.ALL_NULL
+    elif _IntegerTypeAnalyzer(column).is_column_of_this_type():
         return Type.INTEGER
     elif _DecimalTypeAnalyzer(column).is_column_of_this_type():
         return Type.DECIMAL
     else:
         return Type.STRING
+
+
+class _AllNullTypeAnalyzer:
+    def __init__(self, column_strings: "pd.Series[tp.Optional[str]]"):
+        self._column_strings = column_strings
+
+    def is_column_of_this_type(self) -> bool:
+        return self._column_strings.isnull().all()
 
 
 class _IntegerTypeAnalyzer:

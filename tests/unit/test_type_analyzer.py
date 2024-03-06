@@ -8,6 +8,10 @@ from src import type_analyzer as ta
 
 class TestFunction_get_column_type(unittest.TestCase):
     # Note. Columns are read as strings.
+    def test_if_all_rows_are_null(self):
+        column = pd.Series(data=[np.nan, np.nan], name="values")
+        self.assertEqual(ta.Type.ALL_NULL, ta.get_column_type(column))
+
     def test_if_column_is_integer(self):
         column = pd.Series(data=["1", "2", np.nan], name="values")
         self.assertEqual(ta.Type.INTEGER, ta.get_column_type(column))

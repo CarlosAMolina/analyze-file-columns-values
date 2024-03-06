@@ -24,6 +24,7 @@ class TestFunction_get_column_names_and_types_from_df(unittest.TestCase):
         expected_result = [
             ("Column string", type_analyzer.Type.STRING),
             ("Column string all lines with value", type_analyzer.Type.STRING),
+            ("Column all null", type_analyzer.Type.ALL_NULL),
             ("Column integer", type_analyzer.Type.INTEGER),
             ("Column decimal", type_analyzer.Type.DECIMAL),
         ]

@@ -271,6 +271,18 @@ class _IntegerColumnAnalyzer:
         return self._column.name
 
 
+def show_all_null_column_analysis():
+    print("Are there null values?", True)
+    print("All values are null")
+
+
+def get_all_null_sql_definition(column_name: str) -> str:
+    return "{} {} (not enough information to analyze because all values are null)".format(
+        column_name,
+        _get_null_sql_definition(has_null_values=True),
+    )
+
+
 class _DecimalColumnAnalysis(tp.NamedTuple):
     has_null_values: bool
     max_value: str

@@ -24,7 +24,10 @@ def show_file_analysis(file_path_name: str):
         column = file_df[column_name]
         column_type = type_analyzer.get_column_type(column)
         print(f"Column type: {column_type.value}")
-        if column_type == type_analyzer.Type.DECIMAL:
+        if column_type == type_analyzer.Type.ALL_NULL:
+            value_analyzer.show_all_null_column_analysis()
+            sql_definition.append(value_analyzer.get_all_null_sql_definition(column_name))
+        elif column_type == type_analyzer.Type.DECIMAL:
             analysis = value_analyzer.get_decimal_analysis(column)
             value_analyzer.show_decimal_column_analysis(analysis)
             sql_definition.append(value_analyzer.get_decimal_sql_definition(analysis, column_name))
