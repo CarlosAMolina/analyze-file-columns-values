@@ -1,4 +1,5 @@
 import datetime
+import typing as tp
 
 from src import extractors
 from src import type_analyzer
@@ -9,6 +10,7 @@ def show_file_analysis(file_path_name: str):
     print("[{}] Analyzing file {}".format(datetime.datetime.now(), file_path_name))
     file_df = extractors.get_df_from_csv(file_path_name)
     column_names = file_df.columns.tolist()
+    sql_definition: tp.List[str] = []
     for index, column_name in enumerate(file_df, 1):
         print()
         print(
@@ -25,11 +27,17 @@ def show_file_analysis(file_path_name: str):
         if column_type == type_analyzer.Type.DECIMAL:
             analysis = value_analyzer.get_decimal_analysis(column)
             value_analyzer.show_decimal_column_analysis(analysis)
+            sql_definition.append(value_analyzer.get_decimal_sql_definition(analysis))
         elif column_type == type_analyzer.Type.INTEGER:
             analysis = value_analyzer.get_integer_analysis(column)
             value_analyzer.show_integer_column_analysis(analysis)
+            sql_definition.append(value_analyzer.get_integer_sql_definition(analysis))
         elif column_type == type_analyzer.Type.STRING:
             analysis = value_analyzer.get_string_analysis(column)
             value_analyzer.show_string_column_analysis(analysis)
+            sql_definition.append(value_analyzer.get_string_sql_definition(analysis))
         else:
             raise ValueError(column_type)
+        print("\nSQL definition")
+        sql_definition_str = "\n".join(sql_definition)
+        print(sql_definition_str)
