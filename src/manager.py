@@ -1,6 +1,7 @@
 import datetime
 import typing as tp
 
+from pandas import Series
 from pandas import DataFrame as Df
 
 from src import extractors
@@ -29,6 +30,9 @@ def show_file_analysis(file_path_name: str):
     _show_sql_definition(sql_definition)
 
 
+_ColumnAnalysisResults = tp.Tuple[value_analyzer.ColumnValuesAnalysisSummary, value_analyzer.SqlDefinition]
+
+
 class _ColumnAnalysis(tp.NamedTuple):
     column_name: str
     column_type: type_analyzer.Type
@@ -44,20 +48,35 @@ def _get_columns_analysis(df: Df) -> tp.Iterator[_ColumnAnalysis]:
             analysis_summary = value_analyzer.get_all_null_column_analysis_summary()
             sql_definition = value_analyzer.get_all_null_sql_definition(column_name)
         elif column_type == type_analyzer.Type.DECIMAL:
-            analysis = value_analyzer.get_decimal_analysis(column)
-            analysis_summary = value_analyzer.get_decimal_column_analysis_summary(analysis)
-            sql_definition = value_analyzer.get_decimal_sql_definition(analysis, column_name)
+            analysis_summary, sql_definition = _get_decimal_analysis(column, column_name)
         elif column_type == type_analyzer.Type.INTEGER:
-            analysis = value_analyzer.get_integer_analysis(column)
-            analysis_summary = value_analyzer.get_integer_column_analysis_summary(analysis)
-            sql_definition = value_analyzer.get_integer_sql_definition(analysis, column_name)
+            analysis_summary, sql_definition = _get_integer_analysis(column, column_name)
         elif column_type == type_analyzer.Type.STRING:
-            analysis = value_analyzer.get_string_analysis(column)
-            analysis_summary = value_analyzer.get_string_column_analysis_summary(analysis)
-            sql_definition = value_analyzer.get_string_sql_definition(analysis, column_name)
+            analysis_summary, sql_definition = _get_string_analysis(column, column_name)
         else:
             raise ValueError(column_type)
         yield _ColumnAnalysis(column_name, column_type, analysis_summary, sql_definition)
+
+
+def _get_decimal_analysis(column: Series, column_name: str) -> _ColumnAnalysisResults:
+    analysis = value_analyzer.get_decimal_analysis(column)
+    analysis_summary = value_analyzer.get_decimal_column_analysis_summary(analysis)
+    sql_definition = value_analyzer.get_decimal_sql_definition(analysis, column_name)
+    return analysis_summary, sql_definition
+
+
+def _get_integer_analysis(column: Series, column_name: str) -> _ColumnAnalysisResults:
+    analysis = value_analyzer.get_integer_analysis(column)
+    analysis_summary = value_analyzer.get_integer_column_analysis_summary(analysis)
+    sql_definition = value_analyzer.get_integer_sql_definition(analysis, column_name)
+    return analysis_summary, sql_definition
+
+
+def _get_string_analysis(column: Series, column_name: str) -> _ColumnAnalysisResults:
+    analysis = value_analyzer.get_string_analysis(column)
+    analysis_summary = value_analyzer.get_string_column_analysis_summary(analysis)
+    sql_definition = value_analyzer.get_string_sql_definition(analysis, column_name)
+    return analysis_summary, sql_definition
 
 
 def _show_sql_definition(sql_definition: tp.List[str]):
