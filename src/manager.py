@@ -1,6 +1,8 @@
 import datetime
 import typing as tp
 
+from pandas import DataFrame as Df
+
 from src import extractors
 from src import type_analyzer
 from src import value_analyzer
@@ -11,37 +13,51 @@ def show_file_analysis(file_path_name: str):
     file_df = extractors.get_df_from_csv(file_path_name)
     column_names = file_df.columns.tolist()
     sql_definition: tp.List[str] = []
-    for index, column_name in enumerate(file_df, 1):
+    for index, analysis in enumerate(_get_columns_analysis(file_df), 1):
         print()
         print(
             "[{}] Analyzing column {} of {}. Column name: {}".format(
                 datetime.datetime.now(),
                 index,
                 len(column_names),
-                column_name,
+                analysis.column_name,
             )
         )
-        column = file_df[column_name]
+        print(f"Column type: {analysis.column_type.value}")
+        print(analysis.summary)
+        sql_definition.append(analysis.sql_definition)
+    _show_sql_definition(sql_definition)
+
+
+class ColumnAnalysis(tp.NamedTuple):
+    column_name: str
+    column_type: type_analyzer.Type
+    summary: value_analyzer.ColumnValuesAnalysisSummary
+    sql_definition: value_analyzer.SqlDefinition
+
+
+def _get_columns_analysis(df: Df) -> tp.Iterator[ColumnAnalysis]:
+    for column_name in df:
+        column = df[column_name]
         column_type = type_analyzer.get_column_type(column)
-        print(f"Column type: {column_type.value}")
         if column_type == type_analyzer.Type.ALL_NULL:
-            value_analyzer.show_all_null_column_analysis()
-            sql_definition.append(value_analyzer.get_all_null_sql_definition(column_name))
+            analysis_summary = value_analyzer.get_all_null_column_analysis_summary()
+            sql_definition = value_analyzer.get_all_null_sql_definition(column_name)
         elif column_type == type_analyzer.Type.DECIMAL:
             analysis = value_analyzer.get_decimal_analysis(column)
-            value_analyzer.show_decimal_column_analysis(analysis)
-            sql_definition.append(value_analyzer.get_decimal_sql_definition(analysis, column_name))
+            analysis_summary = value_analyzer.get_decimal_column_analysis_summary(analysis)
+            sql_definition = value_analyzer.get_decimal_sql_definition(analysis, column_name)
         elif column_type == type_analyzer.Type.INTEGER:
             analysis = value_analyzer.get_integer_analysis(column)
-            value_analyzer.show_integer_column_analysis(analysis)
-            sql_definition.append(value_analyzer.get_integer_sql_definition(analysis, column_name))
+            analysis_summary = value_analyzer.get_integer_column_analysis_summary(analysis)
+            sql_definition = value_analyzer.get_integer_sql_definition(analysis, column_name)
         elif column_type == type_analyzer.Type.STRING:
             analysis = value_analyzer.get_string_analysis(column)
-            value_analyzer.show_string_column_analysis(analysis)
-            sql_definition.append(value_analyzer.get_string_sql_definition(analysis, column_name))
+            analysis_summary = value_analyzer.get_string_column_analysis_summary(analysis)
+            sql_definition = value_analyzer.get_string_sql_definition(analysis, column_name)
         else:
             raise ValueError(column_type)
-    _show_sql_definition(sql_definition)
+        yield ColumnAnalysis(column_name, column_type, analysis_summary, sql_definition)
 
 
 def _show_sql_definition(sql_definition: tp.List[str]):

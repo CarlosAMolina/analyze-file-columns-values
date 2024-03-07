@@ -29,45 +29,46 @@ class _StringColumnAnalysis(tp.NamedTuple):
     no_stripped: _StringBaseColumnAnalysis
 
 
+ColumnValuesAnalysisSummary = str
+
+
+# TODO rm
 def show_string_column_analysis(analysis: _StringColumnAnalysis):
-    print("Are there null values?", analysis.has_null_values)
-    print("Are there empty values?")
-    print("  If values are stripped:", analysis.stripped.has_empty_values)
-    print("  If values are not stripped:", analysis.no_stripped.has_empty_values)
-    print("Values with maximum length:")
+    print(get_string_column_analysis_summary(analysis))
+
+
+def get_string_column_analysis_summary(analysis: _StringColumnAnalysis) -> ColumnValuesAnalysisSummary:
+    result = "Are there null values? {}".format(analysis.has_null_values)
+    result += "\nAre there empty values?"
+    result += "\n  If values are stripped: {}".format(analysis.stripped.has_empty_values)
+    result += "\n  If values are not stripped: {}".format(analysis.no_stripped.has_empty_values)
+    result += "\nValues with maximum length:"
     max_values_if_stripped = analysis.stripped.max_values
-    print(
-        "  If values are stripped. Number of characters: {}. Values ({}): {}".format(
-            analysis.stripped.max_length,
-            len(max_values_if_stripped),
-            _get_values_applying_limitacion(max_values_if_stripped),
-        )
+    result += "\n  If values are stripped. Number of characters: {}. Values ({}): {}".format(
+        analysis.stripped.max_length,
+        len(max_values_if_stripped),
+        _get_values_applying_limitacion(max_values_if_stripped),
     )
     max_values_if_no_stripped = analysis.no_stripped.max_values
-    print(
-        "  If values are not stripped. Number of characters: {}. Values ({}): {}".format(
-            analysis.no_stripped.max_length,
-            len(max_values_if_no_stripped),
-            _get_values_applying_limitacion(max_values_if_no_stripped),
-        )
+    result += "\n  If values are not stripped. Number of characters: {}. Values ({}): {}".format(
+        analysis.no_stripped.max_length,
+        len(max_values_if_no_stripped),
+        _get_values_applying_limitacion(max_values_if_no_stripped),
     )
-    print("Values with minimum length:")
+    result += "\nValues with minimum length:"
     min_values_if_stripped = analysis.stripped.min_values
-    print(
-        "  If values are stripped. Number of characters: {}. Values ({}): {}".format(
-            analysis.stripped.min_length,
-            len(min_values_if_stripped),
-            _get_values_applying_limitacion(min_values_if_stripped),
-        )
+    result += "\n  If values are stripped. Number of characters: {}. Values ({}): {}".format(
+        analysis.stripped.min_length,
+        len(min_values_if_stripped),
+        _get_values_applying_limitacion(min_values_if_stripped),
     )
     min_values_if_no_stripped = analysis.no_stripped.min_values
-    print(
-        "  If values are not stripped. Number of characters: {}. Values ({}): {}".format(
-            analysis.no_stripped.min_length,
-            len(min_values_if_no_stripped),
-            _get_values_applying_limitacion(min_values_if_no_stripped),
-        )
+    result += "\n  If values are not stripped. Number of characters: {}. Values ({}): {}".format(
+        analysis.no_stripped.min_length,
+        len(min_values_if_no_stripped),
+        _get_values_applying_limitacion(min_values_if_no_stripped),
     )
+    return result
 
 
 def get_string_analysis(column: Series) -> _StringColumnAnalysis:
@@ -93,7 +94,10 @@ def get_string_analysis(column: Series) -> _StringColumnAnalysis:
     )
 
 
-def get_string_sql_definition(analysis: _StringColumnAnalysis, column_name: str) -> str:
+SqlDefinition = str
+
+
+def get_string_sql_definition(analysis: _StringColumnAnalysis, column_name: str) -> SqlDefinition:
     return "{} varchar({}) {},".format(
         column_name, analysis.no_stripped.max_length, _get_null_sql_definition(analysis.has_null_values)
     )
@@ -190,20 +194,22 @@ class _IntegerColumnAnalysis(tp.NamedTuple):
     min_value: int
 
 
+# TODO rm
 def show_integer_column_analysis(analysis: _IntegerColumnAnalysis):
-    print("Are there null values?", analysis.has_null_values)
-    print(
-        "Max value. Number of digits: {}. Value: {}".format(
-            analysis.max_length,
-            analysis.max_value,
-        )
+    print(get_integer_column_analysis_summary(analysis))
+
+
+def get_integer_column_analysis_summary(analysis: _IntegerColumnAnalysis) -> ColumnValuesAnalysisSummary:
+    result = "Are there null values? {}".format(analysis.has_null_values)
+    result += "\nMax value. Number of digits: {}. Value: {}".format(
+        analysis.max_length,
+        analysis.max_value,
     )
-    print(
-        "Min value. Number of digits: {}. Value: {}".format(
-            analysis.min_length,
-            analysis.min_value,
-        )
+    result += "\nMin value. Number of digits: {}. Value: {}".format(
+        analysis.min_length,
+        analysis.min_value,
     )
+    return result
 
 
 def get_integer_analysis(column: Series) -> _IntegerColumnAnalysis:
@@ -217,7 +223,7 @@ def get_integer_analysis(column: Series) -> _IntegerColumnAnalysis:
     )
 
 
-def get_integer_sql_definition(analysis: _IntegerColumnAnalysis, column_name: str) -> str:
+def get_integer_sql_definition(analysis: _IntegerColumnAnalysis, column_name: str) -> SqlDefinition:
     # https://dev.mysql.com/doc/refman/8.0/en/integer-types.html
     mysql_definition_max_value = {
         "integer": 2147483647,
@@ -271,14 +277,23 @@ class _IntegerColumnAnalyzer:
         return self._column.name
 
 
+# TODO rm
 def show_all_null_column_analysis():
-    print("All values are null")
+    print(get_all_null_column_analysis_summary())
 
 
-def get_all_null_sql_definition(column_name: str) -> str:
-    return "{} {} (not enough information to analyze because all values are null)".format(
+_NOT_ENOUGHT_INFORMATION_TEXT = "not enough information to analyze because all values are null"
+
+
+def get_all_null_column_analysis_summary() -> ColumnValuesAnalysisSummary:
+    return f"All values are null ({_NOT_ENOUGHT_INFORMATION_TEXT})"
+
+
+def get_all_null_sql_definition(column_name: str) -> SqlDefinition:
+    return "{} {} ({})".format(
         column_name,
         _get_null_sql_definition(has_null_values=True),
+        _NOT_ENOUGHT_INFORMATION_TEXT,
     )
 
 
@@ -292,27 +307,29 @@ class _DecimalColumnAnalysis(tp.NamedTuple):
     values_with_max_length_of_decimal_part: tp.List[str]
 
 
+# TODO rm
 def show_decimal_column_analysis(analysis: _DecimalColumnAnalysis):
-    print("Are there null values?", analysis.has_null_values)
-    print("Maximum results:")
-    print("  Maximum value:", analysis.max_value)
+    print(get_decimal_column_analysis_summary(analysis))
+
+
+def get_decimal_column_analysis_summary(analysis: _DecimalColumnAnalysis) -> ColumnValuesAnalysisSummary:
+    result = "Are there null values? {}".format(analysis.has_null_values)
+    result += "\nMaximum results:"
+    result += "\n  Maximum value: {}".format(analysis.max_value)
     values_with_max_length_of_integer_part = analysis.values_with_max_length_of_integer_part
-    print(
-        "  Integer part. Maximum number of digits: {}. Values ({}): {}".format(
-            analysis.max_length_of_integer_part,
-            len(values_with_max_length_of_integer_part),
-            _get_values_applying_limitacion(values_with_max_length_of_integer_part),
-        )
+    result += "\n  Integer part. Maximum number of digits: {}. Values ({}): {}".format(
+        analysis.max_length_of_integer_part,
+        len(values_with_max_length_of_integer_part),
+        _get_values_applying_limitacion(values_with_max_length_of_integer_part),
     )
     values_with_max_length_of_decimal_part = analysis.values_with_max_length_of_decimal_part
-    print(
-        "  Decimal part. Maximum number of digits: {}. Values ({}): {}".format(
-            analysis.max_length_of_decimal_part,
-            len(values_with_max_length_of_decimal_part),
-            _get_values_applying_limitacion(values_with_max_length_of_decimal_part),
-        )
+    result += "\n  Decimal part. Maximum number of digits: {}. Values ({}): {}".format(
+        analysis.max_length_of_decimal_part,
+        len(values_with_max_length_of_decimal_part),
+        _get_values_applying_limitacion(values_with_max_length_of_decimal_part),
     )
-    print("Minimum value:", analysis.min_value)
+    result += "\nMinimum value: {}".format(analysis.min_value)
+    return result
 
 
 def get_decimal_analysis(column: Series) -> _DecimalColumnAnalysis:
@@ -328,7 +345,7 @@ def get_decimal_analysis(column: Series) -> _DecimalColumnAnalysis:
     )
 
 
-def get_decimal_sql_definition(analysis: _DecimalColumnAnalysis, column_name: str) -> str:
+def get_decimal_sql_definition(analysis: _DecimalColumnAnalysis, column_name: str) -> SqlDefinition:
     null_definition = _get_null_sql_definition(analysis.has_null_values)
     return "{} decimal({},{}) {},".format(
         column_name,
