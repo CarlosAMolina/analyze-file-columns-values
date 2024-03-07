@@ -29,14 +29,14 @@ def show_file_analysis(file_path_name: str):
     _show_sql_definition(sql_definition)
 
 
-class ColumnAnalysis(tp.NamedTuple):
+class _ColumnAnalysis(tp.NamedTuple):
     column_name: str
     column_type: type_analyzer.Type
     summary: value_analyzer.ColumnValuesAnalysisSummary
     sql_definition: value_analyzer.SqlDefinition
 
 
-def _get_columns_analysis(df: Df) -> tp.Iterator[ColumnAnalysis]:
+def _get_columns_analysis(df: Df) -> tp.Iterator[_ColumnAnalysis]:
     for column_name in df:
         column = df[column_name]
         column_type = type_analyzer.get_column_type(column)
@@ -57,7 +57,7 @@ def _get_columns_analysis(df: Df) -> tp.Iterator[ColumnAnalysis]:
             sql_definition = value_analyzer.get_string_sql_definition(analysis, column_name)
         else:
             raise ValueError(column_type)
-        yield ColumnAnalysis(column_name, column_type, analysis_summary, sql_definition)
+        yield _ColumnAnalysis(column_name, column_type, analysis_summary, sql_definition)
 
 
 def _show_sql_definition(sql_definition: tp.List[str]):
